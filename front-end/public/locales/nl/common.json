@@ -1,0 +1,100 @@
+{
+  "index": {
+    "title": "User Bazaar",
+    "featured": "Uitgelichte Producten"
+  },
+  "navbar": {
+    "search": "Zoeken"
+  },
+  "register": {
+    "cardTitle": "Maak een Account",
+    "registerSubtitle": "Voer uw gegevens in om u aan te melden.",
+    "register": "Registeer",
+    "fullname": "Volledige Naam",
+    "phonenumber": "Telefoonnummer",
+    "email": "Email",
+    "password": "Wachtwoord",
+    "confirmPassword": "Bevestig Wachtwoord",
+    "streetname": "Straat Naam",
+    "housenumber": "Huis Nummer",
+    "housenr": "nr",
+    "postalcode": "Postcode",
+    "state": "Provincie",
+    "city": "Stad",
+    "country": "Land",
+    "newsletter": "Nieuwsletter",
+    "yes": "Ja",
+    "no": "Nee",
+    "seller": "Verkoper",
+    "sellercheckbox": "Ik wil producten verkopen",
+    "newslettercheckbox": "Ik wil de nieuwsbrief ontvangen",
+    "selectcountry": "Selecteer een land",
+    "alreadyAccount": "Heeft u al een account?",
+    "login": "log hier in!"
+  },
+  "login": {
+    "email": "Email",
+    "password": "Wachtwoord",
+    "login": "Inloggen",
+    "NoAccount": "Nog geen account?",
+    "loginSubtitle": "Welkom terug! Voer uw gegevens in.",
+    "signup": "Registreren!"
+  },
+  "product": {
+    "name": "Naam",
+    "description": "Beschrijving",
+    "media": "Media*",
+    "stock": "Voorraad",
+    "price": "Prijs",
+    "details": "Details",
+    "add": "Product Toevoegen",
+    "disclaimer": "*We ondersteunen momenteel alleen het toevoegen van afbeeldingen via een link. Het uploaden van uw eigen afbeeldingen wordt niet ondersteund.",
+    "success": "Product succesvol toegevoegd",
+    "redirect": "U wordt over 3 seconden doorgestuurd naar de startpagina",
+    "hurry": "Haast je, slechts enkele items op voorraad!"
+  },
+  "cart": {
+    "title": "Winkelwagen",
+    "nouserid": "Geen gebruikers-ID gevonden",
+    "nocart": "Geen winkelwagen gevonden",
+    "cartempty": "Uw winkelwagen is leeg",
+    "total": "Totaal: €",
+    "checkout": "Afrekenen"
+  },
+  "checkout": {
+    "title": "Afrekenen",
+    "subtotal": "Subtotaal",
+    "shipping": "Verzending",
+    "vat": "BTW",
+    "payment": "Betaalmethode",
+    "credit_card": "Kredietkaart",
+    "paypal": "PayPal",
+    "order": "Bestelling Plaatsen",
+    "success": "Bestelling succesvol geplaatst",
+    "redirect": "U wordt over 3 seconden doorgestuurd naar de startpagina",
+    "loading": "Laden...",
+    "total": "Totaal"
+  },
+  "order": {
+    "number": "Bestelnummer",
+    "boughtat": "Gekocht op",
+    "items": "Artikelen",
+    "productname": "Productnaam",
+    "quantity": "Aantal",
+    "price": "Prijs",
+    "description": "Beschrijving"
+  },
+  "language": "Taal",
+  "overview": "Overzicht",
+  "settings": "Instellingen",
+  "bills": "Facturen",
+  "orders": "Bestellingen",
+  "logout": "Uitloggen",
+  "isseller": "U bent een verkoper",
+  "noseller": "U bent geen verkoper",
+  "owneroptions": "Eigenaaropties",
+  "adminoptions": "Beheerderopties",
+  "allusers": "Alle Gebruikers",
+  "allproducts": "Alle Producten",
+  "productcatalog": "Product Catalogus"
+}

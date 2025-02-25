@@ -1,0 +1,100 @@
+{
+  "index": {
+    "title": "User Bazaar",
+    "featured": "Featured Products"
+  },
+  "navbar": {
+    "search": "Search"
+  },
+  "register": {
+    "cardTitle": "Create an Account",
+    "registerSubtitle": "Enter your details to sign up.",
+    "register": "Register",
+    "fullname": "Full Name",
+    "phonenumber": "Phone Number",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "streetname": "Street Name",
+    "housenr": "nr",
+    "housenumber": "House Number",
+    "postalcode": "Postal Code",
+    "state": "State",
+    "city": "City",
+    "country": "Country",
+    "newsletter": "Newsletter",
+    "yes": "Yes",
+    "no": "No",
+    "seller": "Seller",
+    "sellercheckbox": "I want to sell products",
+    "newslettercheckbox": "I want to receive the newsletter",
+    "selectcountry": "Select a country",
+    "alreadyAccount": "Already have an account?",
+    "login": "Login!"
+  },
+  "login": {
+    "email": "Email",
+    "password": "Password",
+    "login": "Login",
+    "NoAccount": "Don't have an account?",
+    "loginSubtitle": "Welcome back! Please enter your details.",
+    "signup": "Signup!"
+  },
+  "product": {
+    "name": "Name",
+    "description": "Description",
+    "media": "Media*",
+    "stock": "Stock",
+    "price": "Price",
+    "details": "Details",
+    "add": "Add Product",
+    "disclaimer": "*We currently only support adding images via a link. We don't support uploading your own images",
+    "success": "Product added successfully",
+    "redirect": "You will be redirected to the homepage in 3 seconds",
+    "hurry": "Hurry, only a few items left in stock!"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "nouserid": "No user ID found",
+    "nocart": "No cart found",
+    "cartempty": "Your cart is empty",
+    "total": "Total: €",
+    "checkout": "Checkout"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "vat": "VAT",
+    "payment": "Payment Method",
+    "credit_card": "Credit Card",
+    "paypal": "PayPal",
+    "order": "Place Order",
+    "success": "Order placed successfully",
+    "redirect": "You will be redirected to the homepage in 3 seconds",
+    "loading": "Loading...",
+    "total": "Total"
+  },
+  "order": {
+    "number": "Order Number",
+    "boughtat": "Bought At",
+    "items": "Items",
+    "productname": "Product Name",
+    "quantity": "Quantity",
+    "price": "Price",
+    "description": "Description"
+  },
+  "language": "Language",
+  "overview": "Overview",
+  "settings": "Settings",
+  "bills": "Bills",
+  "orders": "Orders",
+  "logout": "Logout",
+  "isseller": "You are a seller",
+  "noseller": "You are not a seller",
+  "owneroptions": "Owner options",
+  "adminoptions": "Admin options",
+  "allusers": "All Users",
+  "allproducts": "All Products",
+  "productcatalog": "Product Catalog"
+}

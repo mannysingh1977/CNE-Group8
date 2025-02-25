@@ -1,0 +1,101 @@
+{
+  "index": {
+    "title": "User Bazaar",
+    "featured": "Produits en vedette"
+  },
+  "navbar": {
+    "search": "Chercher"
+  },
+  "register": {
+    "cardTitle": "Créer un compte",
+    "registerSubtitle": "Entrez vos coordonnées pour vous inscrire.",
+    "register": "Registre",
+    "fullname": "Nom et prénom",
+    "phonenumber": "Numéro de telephone",
+    "email": "Email",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "streetname": "Nom de la rue",
+    "housenr": "nr",
+    "housenumber": "Numéro de maison",
+    "postalcode": "Code Postal",
+    "state": "État",
+    "city": "Ville",
+    "country": "Pays",
+    "newsletter": "Bulletin",
+    "yes": "Oui",
+    "no": "No",
+    "seller": "Vendeuse",
+    "sellercheckbox": "Je veux vendre des produits",
+    "newslettercheckbox": "Je veux recevoir la newsletter",
+    "selectcountry": "Sélectionnez un pays",
+    "alreadyAccount": "Vous avez déjà un compte?",
+    "login": "Connectez-vous!"
+  },
+  "login": {
+    "email": "Email",
+    "password": "Mot de passe",
+    "login": "Connexion",
+    "NoAccount": "Pas encore de compte?",
+    "loginSubtitle": "Bienvenue! Veuillez entrer vos coordonnées.",
+    "signup": "S'inscrire!"
+  },
+  "product": {
+    "name": "Nom",
+    "description": "Description",
+    "media": "Média*",
+    "stock": "Stock",
+    "price": "Prix",
+    "details": "Détails",
+    "add": "Ajouter un Produit",
+    "disclaimer": "*Nous prenons actuellement en charge uniquement l'ajout via un lien. Nous ne prenons pas en charge le téléchargement de vos propres images.",
+    "success": "Produit ajouté avec succès",
+    "redirect": "Vous serez redirigé vers la page d'accueil dans 3 secondes",
+    "hurry": "Dépêchez-vous, il ne reste que quelques articles en stock !"
+  },
+  "cart": {
+    "title": "Panier",
+    "nouserid": "Aucun identifiant d'utilisateur trouvé",
+    "nocart": "Aucun panier trouvé",
+    "cartempty": "Votre panier est vide",
+    "total": "Total: €",
+    "checkout": "Check-out"
+  },
+  "checkout": {
+    "title": "Check-out",
+    "subtotal": "Sous-total",
+    "shipping": "Expédition",
+    "vat": "TVA",
+    "payment": "Méthode de paiement",
+    "credit_card": "Carte de crédit",
+    "paypal": "PayPal",
+    "order": "Passer la commande",
+    "success": "Commande passée avec succès",
+    "redirect": "Vous serez redirigé vers la page d'accueil dans 3 secondes",
+    "loading": "Chargement...",
+    "total": "Total"
+
+  },
+  "order": {
+    "number": "Numéro de commande",
+    "boughtat": "Acheté le",
+    "items": "Articles",
+    "productname": "Nom du produit",
+    "quantity": "Quantité",
+    "price": "Prix",
+    "description": "Description"
+  },
+  "language": "Langue",
+  "overview": "Aperçu",
+  "settings": "Paramètres",
+  "bills": "Factures",
+  "orders": "Commandes",
+  "logout": "Déconnecter",
+  "isseller": "Vous êtes un vendeur",
+  "noseller": "Vous n'êtes pas un vendeur",
+  "owneroptions": "Options du propriétaire",
+  "adminoptions": "Options de l'administrateur",
+  "allusers": "Tout utilisateur",
+  "allproducts": "Tout Produits",
+  "productcatalog": "Catalogue de produits"
+}

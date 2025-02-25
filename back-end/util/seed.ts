@@ -328,7 +328,7 @@ const main = async () => {
         {
             name: 'JBL Headphones',
             description: 'Noise-cancelling over-ear headphones',
-            media: '/productPictures/jbl.png',
+            media: '/productPictures/jbl.jpeg',
             stock: 50,
             price: 199,
             details: 'Wireless, 20 hours battery life',

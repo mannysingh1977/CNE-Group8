@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int             @id @default(autoincrement())
+  name           String
+  phoneNumber    String          @unique
+  emailAddress   String          @unique
+  password       String
+  seller         Boolean
+  newsLetter     Boolean
+  role           String
+  addressId      Int             @unique
+  address        Address         @relation(fields: [addressId], references: [id])
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  reviews        Review[]
+  ProductCatalog ProductCatalog?
+  ShoppingCart   ShoppingCart?
+  Order          Order[]
+
+  @@map("users")
+}
+
+model Address {
+  id          Int      @id @default(autoincrement())
+  street      String
+  houseNumber String
+  city        String
+  state       String
+  postalCode  String
+  country     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  User        User?
+
+  @@map("addresses")
+}
+
+model Product {
+  id              Int              @id @default(autoincrement())
+  name            String
+  description     String
+  media           String
+  stock           Int
+  price           Int
+  details         String
+  reviews         Review[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  cartItems       CartItem[]
+  productCatalogs ProductCatalog[]
+}
+
+model ShoppingCart {
+  id        Int        @id @default(autoincrement())
+  userId    Int        @unique
+  user      User       @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("shopping_carts")
+}
+
+model CartItem {
+  id             Int           @id @default(autoincrement())
+  quantity       Int
+  productId      Int
+  shoppingCartId Int?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  orderId        Int?
+  product        Product       @relation(fields: [productId], references: [id])
+  shoppingCart   ShoppingCart? @relation(fields: [shoppingCartId], references: [id])
+  order          Order?        @relation(fields: [orderId], references: [id], name: "OrderItems")
+
+  @@map("cart_items")
+}
+
+model ProductCatalog {
+  id        Int       @id @default(autoincrement())
+  products  Product[]
+  userId    Int       @unique
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+  review    String   @db.VarChar(1000)
+  stars     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id        Int        @id @default(autoincrement())
+  items     CartItem[] @relation("OrderItems")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  userId    Int
+  user      User       @relation(fields: [userId], references: [id])
+}

@@ -27,7 +27,7 @@ const getProductsLimitDesc = async (limit: number): Promise<Product[]> => {
     }
 };
 
-const getProductById = async (productId: number): Promise<Product> => {
+const getProductById = async (productId: string): Promise<Product> => {
     try {
         const productPrisma = await database.product.findUnique({
             where: {
@@ -44,7 +44,7 @@ const getProductById = async (productId: number): Promise<Product> => {
     }
 };
 
-const updateProductStock = async (productId: number, amount: number): Promise<void> => {
+const updateProductStock = async (productId: string, amount: number): Promise<void> => {
     try {
         const existingProduct = await database.product.findUnique({
             where: {
@@ -100,24 +100,30 @@ const createProduct = async (product: any): Promise<Product> => {
             data: {
                 products: {
                     create: {
-                        name: product.name,
-                        description: product.description,
-                        media: product.media,
-                        stock: Number(product.stock),
-                        price: Number(product.price),
-                        details: product.details,
+                        product: {
+                            create: {
+                                name: product.name,
+                                description: product.description,
+                                media: product.media,
+                                stock: Number(product.stock),
+                                price: Number(product.price),
+                                details: product.details,
+                            },
+                        },
                     },
                 },
             },
             include: {
-                products: true,
+                products: {
+                    include: {
+                        product: true,
+                    },
+                },
             },
         });
-
+        const createdProduct = productCatalogPrisma.products.find((p) => p.product.name === product.name)?.product;
         console.log('productCatalogPrisma', productCatalogPrisma);
         console.log('productCatalogPrisma.products', productCatalogPrisma.products);
-
-        const createdProduct = productCatalogPrisma.products.find((p) => p.name === product.name);
 
         if (!createdProduct) {
             throw new Error('Product creation failed');
@@ -131,7 +137,7 @@ const createProduct = async (product: any): Promise<Product> => {
     }
 };
 
-const getProductCatalog = async (userId: number): Promise<ProductCatalog | null> => {
+const getProductCatalog = async (userId: string): Promise<ProductCatalog | null> => {
     const productCatalog = await database.productCatalog.findUnique({
         where: {
             userId: userId,

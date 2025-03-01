@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import Modal from "react-modal";
 
 interface CheckoutProps {
-  userId: number;
+  userId: string;
   cart: ShoppingCart | undefined;
 }
 
@@ -23,7 +23,7 @@ const CheckoutComponent: React.FC<CheckoutProps> = ({ userId, cart }) => {
   }
   const { t } = useTranslation();
 
-  const checkout = (userId: number, cart: ShoppingCart) => async () => {
+  const checkout = (userId: string, cart: ShoppingCart) => async () => {
     try {
       const token = localStorage.getItem("token");
       if (token) {

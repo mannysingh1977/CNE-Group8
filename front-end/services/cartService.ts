@@ -1,7 +1,7 @@
 import { ShoppingCart } from "@/types/cartTypes";
 import router from "next/router";
 
-export const fetchShoppingCart = async (userId: number, token: string) => {
+export const fetchShoppingCart = async (userId: string, token: string) => {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}cart/items/${userId}`,
@@ -28,9 +28,9 @@ export const fetchShoppingCart = async (userId: number, token: string) => {
 
 export const updateCartQuantityInDatabase = async (
   itemId: string,
-  productId: number,
+  productId: string,
   newQuantity: number,
-  userId: number,
+  userId: string,
   token: string
 ) => {
   const res = await fetch(
@@ -51,8 +51,8 @@ export const updateCartQuantityInDatabase = async (
 };
 
 export const removeFromDatabaseService = async (
-  itemId: number,
-  userId: number,
+  itemId: string,
+  userId: string,
   token: string
 ) => {
   const res = await fetch(
@@ -74,7 +74,7 @@ export const removeFromDatabaseService = async (
 };
 
 export const checkoutService = async (
-  userId: number,
+  userId: string,
   cart: ShoppingCart,
   token: string
 ) => {
@@ -97,7 +97,7 @@ export const checkoutService = async (
   return res;
 };
 
-export const getOrdersByUserId = async (userId: number, token: string) => {
+export const getOrdersByUserId = async (userId: string, token: string) => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}cart/orders/${userId}`,
     {
@@ -110,6 +110,6 @@ export const getOrdersByUserId = async (userId: number, token: string) => {
   if (!res.ok) {
     throw new Error("Failed to get orders by user id");
   }
-  
+
   return res;
 };

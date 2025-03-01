@@ -2,12 +2,12 @@ import { User } from './user';
 import { Product } from './product';
 
 export class Review {
-    private id?: number;
+    private id?: string;
     private user: User;
     private product: Product;
     private reviewText: string;
 
-    constructor(review: { id?: number; user: User; product: Product; reviewText: string }) {
+    constructor(review: { id?: string; user: User; product: Product; reviewText: string }) {
         this.validate(review);
         this.id = review.id;
         this.user = review.user;
@@ -15,7 +15,7 @@ export class Review {
         this.reviewText = review.reviewText;
     }
 
-    validate(review: { id?: number; user: User; product: Product; reviewText: string }) {
+    validate(review: { id?: string; user: User; product: Product; reviewText: string }) {
         if (review.reviewText.length > 1000)  {
             throw new Error('Review text is too long');
         }
@@ -25,7 +25,7 @@ export class Review {
         }
     }
 
-    getId(): number | undefined {
+    getId(): string | undefined {
         return this.id;
     }
     getUser(): User {

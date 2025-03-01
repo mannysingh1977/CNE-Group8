@@ -7,25 +7,26 @@ interface ShoppingCartService extends ShoppingCart {
     items: CartItem[];
 }
 
-const getCartItems = async (userId: number) => {
+const getCartItems = async (userId: string) => {
     const cartItems = await cartDB.getCartItems(userId);
     return cartItems;
 };
 
-const addToCart = async (userId: number, productId: number, quantity: number) => {
+const addToCart = async (userId: string, productId: string, quantity: number) => {
     const cart = await cartDB.addToCart(userId, productId, quantity);
     return cart;
 };
 
-const removeFromCart = async (userId: number, productId: number) => {
+const removeFromCart = async (userId: string, productId: string) => {
     return await cartDB.removeFromCart(userId, productId);
 };
 
-const updateCart = async (userId: number, productId: number, quantity: number, itemId: number) => {
+const updateCart = async (userId: string, productId: string, quantity: number, itemId: string) => {
     return await cartDB.updateCart(userId, itemId, productId, quantity);
 };
 
-export const checkout = async (userId: number, cart: any) => {
+export const checkout = async (userId: string, cart: any) => {
+    // console.log('UserId: ' + userId)
     const existingCart = await cartDB.getCartByUserId(userId);
 
     if (!existingCart) {
@@ -44,7 +45,7 @@ export const checkout = async (userId: number, cart: any) => {
     return newOrder;
 };
 
-const getOrdersByUserId = async (userId: number) => {
+const getOrdersByUserId = async (userId: string) => {
     const response = await cartDB.getOrdersByUserId(userId);
     console.log('Orders fetched:', response);
     return response;

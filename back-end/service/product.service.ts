@@ -10,7 +10,7 @@ const getProductsLimitDesc = async (limit: number) => {
     return products;
 };
 
-const getProductById = async (productId: number) => {
+const getProductById = async (productId: string) => {
     const product = await productDb.getProductById(productId);
     return product;
 };
@@ -20,7 +20,7 @@ const createProduct = async (product: any) => {
     return newProduct;
 };
 
-const getProductCatalog = async (userId: number) => {
+const getProductCatalog = async (userId: string) => {
     const productCatalog = await productDb.getProductCatalog(userId);
     return productCatalog;
 };

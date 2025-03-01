@@ -3,7 +3,7 @@ import { Address } from './address';
 import { User as UserPrisma, Address as AddressPrisma } from '@prisma/client';
 
 export class User {
-    private id?: number;
+    private id?: string | undefined;
     private name: string;
     private phoneNumber: string;
     private emailAddress: string;
@@ -14,7 +14,7 @@ export class User {
     private role: Role;
 
     constructor(user: {
-        id?: number;
+        id?: string;
         name: string;
         phoneNumber: string;
         emailAddress: string;
@@ -37,7 +37,7 @@ export class User {
     }
 
     validate(user: {
-        id?: number;
+        id?: string;
         name: string;
         phoneNumber: string;
         emailAddress: string;
@@ -94,12 +94,12 @@ export class User {
         this.address = address;
     };
 
-    
+
     setNewsLetter = (newsLetter: boolean) => {
         this.newsLetter = newsLetter;
         };
-        
-        
+
+
         */
 
     setSeller = (seller: boolean) => {
@@ -110,7 +110,7 @@ export class User {
     };
 
     //getters
-    getId(): number | undefined {
+    getId(): string | undefined {
         return this.id;
     }
     getName(): string {

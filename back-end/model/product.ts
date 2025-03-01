@@ -1,7 +1,7 @@
 import {Product as ProductPrisma} from '@prisma/client';
 
 export class Product {
-    private id: number | undefined;
+    private id: string | undefined;
     private name: string;
     private description: string;
     private media: string;
@@ -29,7 +29,7 @@ export class Product {
         });
     }
 
-    constructor(product: {name: string, description: string, media: string, stock: number, price: number, details: string, id?: number | undefined}) {
+    constructor(product: {name: string, description: string, media: string, stock: number, price: number, details: string, id?: string | undefined}) {
         this.validate(product);
         this.id = product.id;
         this.name = product.name;
@@ -40,7 +40,7 @@ export class Product {
         this.details = product.details;
     }
 
-    validate(product: {name: string, description: string, media: string, stock: number, price: number, details: string, id?: number | undefined}) {
+    validate(product: {name: string, description: string, media: string, stock: number, price: number, details: string, id?: string | undefined}) {
         if (!product.name) {
             throw new Error('Name is required');
         }
@@ -61,7 +61,7 @@ export class Product {
         }
     }
 
-    public getId(): number | undefined {
+    public getId(): string | undefined {
         return this.id;
     }
 

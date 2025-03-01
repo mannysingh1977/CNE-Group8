@@ -31,6 +31,7 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import productService from '../service/product.service';
+import { ObjectId } from 'mongodb';
 
 const productRouter = express.Router();
 
@@ -95,7 +96,14 @@ export { productRouter };
 
 productRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.status(200).send(await productService.getProductById(Number(req.params.id)));
+        const productId = req.params.id
+        if (ObjectId.isValid(productId)) {
+            const objectId = new ObjectId(productId)
+            const product = await productService.getProductById(objectId.toString())
+            res.status(200).send(product);
+        } else {
+            res.status(400).send({ error: 'Invalid product id provided' })
+        }
     } catch (error) {
         next(error);
     }
@@ -112,7 +120,7 @@ productRouter.post('/', async (req: Request, res: Response, next: NextFunction) 
 
 productRouter.get('/catalog/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.send(await productService.getProductCatalog(Number(req.params.userId)));
+        res.send(await productService.getProductCatalog(String(req.params.userId)));
     } catch (error) {
         next(error);
     }

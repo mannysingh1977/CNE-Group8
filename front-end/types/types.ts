@@ -4,7 +4,7 @@ export type StatusMessage = {
 };
 
 export type User = {
-    id?: number;
+    id?: string;
     name?: string;
     phoneNumber?: string;
     emailAddress?: string;
@@ -19,7 +19,7 @@ export type User = {
 };
 
 export type Address = {
-    id?: number;
+    id?: string;
     street?: string;
     houseNumber?: string;
     city?: string;

@@ -12,7 +12,7 @@ interface ProductCardProps {
     name: string;
     price: number;
     media: string;
-    productId: number;
+    productId: string;
     onMessage: (text: string) => void;
 }
 
@@ -37,7 +37,7 @@ const ProductById = ({ onMessage }: { onMessage: (text: string) => void }) => {
 
     const getProductById = async () => {
         const productResponse = await fetchProduct(
-            Number(productId)
+            String(productId)
         );
         const product = productResponse;
         setProduct(product);
@@ -47,7 +47,7 @@ const ProductById = ({ onMessage }: { onMessage: (text: string) => void }) => {
         if (productId) getProductById();
     }, [productId]);
 
-    const addToCart = async (productId: number, event: React.MouseEvent) => {
+    const addToCart = async (productId: string, event: React.MouseEvent) => {
         event.stopPropagation();
         try {
             const token = localStorage.getItem("token");
@@ -97,7 +97,7 @@ const ProductById = ({ onMessage }: { onMessage: (text: string) => void }) => {
                         <p className="pr-5 font-bold text-gray-700">{t('product.price')}: <span className="text-green-500">${product.price}</span></p>
                         <p className="font-bold text-gray-700 pr-5">{t('product.stock')}: <span className="text-red-500">{product.stock}</span></p>
                     <button
-                        onClick={(event) => addToCart(Number(productId), event)}
+                        onClick={(event) => addToCart(String(productId), event)}
                         className="bg-blue-700 hover:bg-blue-800 text-white font-medium text-sm sm:text-base py-2 px-3 sm:px-4 rounded-md shadow-sm transition duration-300 ease-in-out transform hover:scale-102 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center space-x-1 sm:space-x-2 w-auto"
                     >
                         <Plus size={16} className="sm:w-5 sm:h-5" />

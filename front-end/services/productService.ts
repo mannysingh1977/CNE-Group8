@@ -1,7 +1,7 @@
 import { addProductType, Product } from "@/types/cartTypes";
 import { jwtDecode } from "jwt-decode";
 
-export const getProductById = async (productId: number) => {
+export const getProductById = async (productId: string) => {
     const token = localStorage.getItem("token");
     const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}products/${productId}`,
@@ -25,7 +25,7 @@ export const postProduct = async (product: addProductType) => {
     if (!token) {
         throw new Error("Token is null");
     }
-    const decodedToken = jwtDecode<{ userId: number }>(token);
+    const decodedToken = jwtDecode<{ userId: string }>(token);
 
     product.userId = decodedToken.userId;
 
@@ -43,7 +43,7 @@ export const postProduct = async (product: addProductType) => {
     return res;
 }
 
-export const getProductCatalog = async (userId: number) => {
+export const getProductCatalog = async (userId: string) => {
     console.log('userId', userId)
     const token = localStorage.getItem("token");
     const res = await fetch(

@@ -7,7 +7,7 @@ interface ProductCardProps {
   name: string;
   price: number;
   media: string;
-  productId: number;
+  productId: string;
   onMessage: (text: string) => void;
 }
 
@@ -20,7 +20,7 @@ export function ProductCard({
 }: ProductCardProps) {
   const router = useRouter();
 
-  const addToCart = async (productId: number, event: React.MouseEvent) => {
+  const addToCart = async (productId: string, event: React.MouseEvent) => {
     event.stopPropagation();
     try {
       const token = localStorage.getItem("token");

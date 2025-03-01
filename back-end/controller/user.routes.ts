@@ -35,8 +35,7 @@
  *       type: object
  *       properties:
  *         id:
- *           type: number
- *           format: int64
+ *           type: string
  *         name:
  *           type: string
  *         phoneNumber:
@@ -106,6 +105,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
 import { UserInput, UserInputLogin } from '../types';
+import { ObjectId } from 'mongodb';
 
 const userRouter = express.Router();
 
@@ -209,8 +209,7 @@ userRouter.post('/register', async (req: Request, res: Response, next: NextFunct
  *         name: id
  *         required: true
  *         schema:
- *           type: integer
- *           format: int64
+ *           type: string
  *     responses:
  *       200:
  *         description: User details
@@ -222,11 +221,12 @@ userRouter.post('/register', async (req: Request, res: Response, next: NextFunct
 userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = req.params.id;
-        if (userId) {
-            const user = await userService.getUserById(Number(userId));
+        if (ObjectId.isValid(userId)) {
+            const objectId = new ObjectId(userId);
+            const user = await userService.getUserById(objectId.toString());
             res.status(200).send(user);
         } else {
-            res.status(400).send({ error: 'No user id provided' });
+            res.status(400).send({ error: 'Invalid user id provided' });
         }
     } catch (error) {
         next(error);
@@ -245,8 +245,7 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  *         name: userId
  *         required: true
  *         schema:
- *           type: integer
- *           format: int64
+ *           type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -266,9 +265,9 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  */
 userRouter.put('/updateRole/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userId = req.params.userId;
+        const userId = new ObjectId(req.params.userId);
         const { role } = req.body;
-        const updatedUser = await userService.updateUserRole(Number(userId), role);
+        const updatedUser = await userService.updateUserRole(userId.toString(), role);
         res.status(200).json(updatedUser);
     } catch (error) {
         next(error);
@@ -277,9 +276,9 @@ userRouter.put('/updateRole/:userId', async (req: Request, res: Response, next: 
 
 userRouter.put('/seller/grant/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userId = req.params.userId;
+        const userId = new ObjectId(req.params.userId);
         const token = req.body.token;
-        const updatedUser = await userService.grantSellerStatus(Number(userId), String(token));
+        const updatedUser = await userService.grantSellerStatus(userId.toString(), String(token));
         res.status(200).json(updatedUser);
     } catch (error) {
         next(error);
@@ -290,9 +289,9 @@ userRouter.put(
     '/seller/revoke/:userId',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const userId = req.params.userId;
+            const userId = new ObjectId(req.params.userId);
             const token = req.body.token;
-            const updatedUser = await userService.revokeSellerStatus(Number(userId), String(token));
+            const updatedUser = await userService.revokeSellerStatus(userId.toString(), String(token));
             res.status(200).json(updatedUser);
         } catch (error) {
             next(error);
@@ -304,9 +303,9 @@ userRouter.delete(
     '/seller/remove/:userId',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const userId = req.params.userId;
+            const userId = new ObjectId(req.params.userId);
             const token = req.body.token;
-            const deletedUser = await userService.deleteUser(Number(userId), String(token));
+            const deletedUser = await userService.deleteUser(userId.toString(), String(token));
             res.status(200);
         } catch (error) {
             next(error);

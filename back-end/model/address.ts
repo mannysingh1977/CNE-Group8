@@ -1,7 +1,7 @@
 import {Address as AddressPrisma} from '@prisma/client'
 
 export class Address {
-    private id: number | undefined;
+    private id: string | undefined;
     private street: string;
     private houseNumber: string;
     private city: string;
@@ -9,7 +9,7 @@ export class Address {
     private postalCode: string;
     private country: string;
 
-    constructor(address: { street: string, city: string, state: string, houseNumber: string, postalCode: string, country: string, id?: number | undefined }) {
+    constructor(address: { street: string, city: string, state: string, houseNumber: string, postalCode: string, country: string, id?: string | undefined }) {
         this.validate(address);
         this.id = address.id;
         this.street = address.street;
@@ -20,7 +20,7 @@ export class Address {
         this.country = address.country;
     };
 
-    validate(address: { street: string, city: string, state: string, houseNumber: string, postalCode: string, country: string, id?: number | undefined }) {
+    validate(address: { street: string, city: string, state: string, houseNumber: string, postalCode: string, country: string, id?: string | undefined }) {
         if (!address.street) {
             throw new Error('Street is required')
         }
@@ -41,7 +41,7 @@ export class Address {
         }
     }
 
-    public getId(): number | undefined {
+    public getId(): string | undefined {
         return this.id;
     };
 
@@ -87,7 +87,7 @@ export class Address {
         state,
         postalCode,
         country
-    }: AddressPrisma & { id?: number }) {
+    }: AddressPrisma & { id?: string }) {
         return new Address({
             id: undefined,
             street,

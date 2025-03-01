@@ -1,7 +1,7 @@
 export interface Product {
   updatedAt: string | number | Date;
   createdAt: string | number | Date;
-  id: number;
+  id: string;
   name: string;
   price: number;
   media: string;
@@ -13,7 +13,7 @@ export type CartItem = {
   id?: string;
   quantity: number;
   product: Product;
-  productId: number;
+  productId: string;
 };
 
 export type ShoppingCart = {
@@ -23,12 +23,12 @@ export type ShoppingCart = {
 };
 
 export type addProductType = {
-  id?: number;
+  id?: string;
   name: string;
   description: string;
   stock: number;
   media: string;
   price: number;
   details: string;
-  userId?: number;
+  userId?: string;
 }

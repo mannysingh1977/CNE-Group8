@@ -45,7 +45,7 @@ const cartRouter = express.Router();
  *         name: userId
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
  *         description: ID of the user
  *     responses:
  *       200:
@@ -58,7 +58,7 @@ const cartRouter = express.Router();
  *                 type: object
  *                 properties:
  *                   productId:
- *                     type: integer
+ *                     type: string
  *                   quantity:
  *                     type: integer
  *                   name:
@@ -72,7 +72,7 @@ const cartRouter = express.Router();
  */
 cartRouter.get('/items/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.send(await cartService.getCartItems(Number(req.params.userId)));
+        res.send(await cartService.getCartItems(String(req.params.userId)));
     } catch (error) {
         next(error);
     }
@@ -90,7 +90,7 @@ cartRouter.get('/items/:userId', async (req: Request, res: Response, next: NextF
  *         name: userId
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
  *         description: ID of the user
  *     requestBody:
  *       required: true
@@ -100,7 +100,7 @@ cartRouter.get('/items/:userId', async (req: Request, res: Response, next: NextF
  *             type: object
  *             properties:
  *               productId:
- *                 type: integer
+ *                 type: string
  *               quantity:
  *                 type: integer
  *     responses:
@@ -112,7 +112,7 @@ cartRouter.get('/items/:userId', async (req: Request, res: Response, next: NextF
  *               type: object
  *               properties:
  *                 productId:
- *                   type: integer
+ *                   type: string
  *                 quantity:
  *                   type: integer
  *       401:
@@ -124,8 +124,8 @@ cartRouter.post('/add/:userId', async (req: Request, res: Response, next: NextFu
     try {
         res.send(
             await cartService.addToCart(
-                Number(req.params.userId),
-                Number(req.body.productId),
+                String(req.params.userId),
+                String(req.body.productId),
                 Number(req.body.quantity)
             )
         );
@@ -146,7 +146,7 @@ cartRouter.post('/add/:userId', async (req: Request, res: Response, next: NextFu
  *         name: userId
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
  *         description: ID of the user
  *     requestBody:
  *       required: true
@@ -156,7 +156,7 @@ cartRouter.post('/add/:userId', async (req: Request, res: Response, next: NextFu
  *             type: object
  *             properties:
  *               productId:
- *                 type: integer
+ *                 type: string
  *     responses:
  *       200:
  *         description: Item added to the cart
@@ -166,7 +166,7 @@ cartRouter.post('/add/:userId', async (req: Request, res: Response, next: NextFu
  *               type: object
  *               properties:
  *                 productId:
- *                   type: integer
+ *                   type: string
  *       401:
  *         description: Unauthorized
  *       404:
@@ -175,7 +175,7 @@ cartRouter.post('/add/:userId', async (req: Request, res: Response, next: NextFu
 cartRouter.delete('/remove/:userId/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         res.send(
-            await cartService.removeFromCart(Number(req.params.userId), Number(req.body.productId))
+            await cartService.removeFromCart(String(req.params.userId), String(req.body.productId))
         );
     } catch (error) {
         next(error);
@@ -194,7 +194,7 @@ cartRouter.delete('/remove/:userId/', async (req: Request, res: Response, next: 
  *         name: userId
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
  *         description: ID of the user
  *     requestBody:
  *       required: true
@@ -204,9 +204,9 @@ cartRouter.delete('/remove/:userId/', async (req: Request, res: Response, next: 
  *             type: object
  *             properties:
  *               itemId:
- *                 type: integer
+ *                 type: string
  *               productId:
- *                 type: integer
+ *                 type: string
  *               quantity:
  *                 type: integer
  *     responses:
@@ -218,9 +218,9 @@ cartRouter.delete('/remove/:userId/', async (req: Request, res: Response, next: 
  *               type: object
  *               properties:
  *                 itemId:
- *                   type: integer
+ *                   type: string
  *                 productId:
- *                   type: integer
+ *                   type: string
  *                 quantity:
  *                   type: integer
  *       401:
@@ -233,10 +233,10 @@ cartRouter.put('/update/:userId', async (req: Request, res: Response, next: Next
         const { itemId, productId, quantity } = req.body;
         res.send(
             await cartService.updateCart(
-                Number(req.params.userId),
-                Number(productId),
+                String(req.params.userId),
+                String(productId),
                 Number(quantity),
-                Number(itemId)
+                String(itemId)
             )
         );
     } catch (error) {
@@ -256,7 +256,7 @@ cartRouter.put('/update/:userId', async (req: Request, res: Response, next: Next
  *         name: userId
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
  *         description: ID of the user
  *     requestBody:
  *       required: true
@@ -271,7 +271,7 @@ cartRouter.put('/update/:userId', async (req: Request, res: Response, next: Next
  *                   type: object
  *                   properties:
  *                     productId:
- *                       type: integer
+ *                       type: string
  *                     quantity:
  *                       type: integer
  *     responses:
@@ -292,11 +292,12 @@ cartRouter.put('/update/:userId', async (req: Request, res: Response, next: Next
 cartRouter.delete('/checkout/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { userId } = req.params;
+        console.log("User id in route: " + userId)
         const { cart } = req.body;
 
         console.log('Received cart for checkout:', cart);
 
-        const newOrder = await cartService.checkout(Number(userId), cart);
+        const newOrder = await cartService.checkout(String(userId), cart);
 
         res.status(200).send(newOrder);
     } catch (error) {
@@ -316,7 +317,7 @@ cartRouter.delete('/checkout/:userId', async (req: Request, res: Response, next:
  *         name: userId
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
  *         description: ID of the user
  *     responses:
  *       200:
@@ -334,7 +335,7 @@ cartRouter.delete('/checkout/:userId', async (req: Request, res: Response, next:
  */
 cartRouter.get('/orders/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const response = await cartService.getOrdersByUserId(Number(req.params.userId));
+        const response = await cartService.getOrdersByUserId(String(req.params.userId));
         console.log('Orders fetched routes:', response);
         res.send(response);
     } catch (error) {

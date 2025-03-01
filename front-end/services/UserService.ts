@@ -15,7 +15,7 @@ const loginUser = (user: User) => {
   });
 };
 
-export const getUser = async (userId: number) => {
+export const getUser = async (userId: string) => {
   const response = await fetch(
     process.env.NEXT_PUBLIC_API_URL + `users/${userId}`,
     {
@@ -51,7 +51,7 @@ export const getAllUsers = async () => {
   return user;
 };
 
-export const revokeSellerUser = async (userId: number) => {
+export const revokeSellerUser = async (userId: string) => {
   const token = localStorage.getItem("token");
 
   if (!token) {
@@ -84,7 +84,7 @@ export const revokeSellerUser = async (userId: number) => {
   return response;
 };
 
-export const grantSellerUser = async (userId: number) => {
+export const grantSellerUser = async (userId: string) => {
   const token = localStorage.getItem("token");
 
   if (!token) {
@@ -116,7 +116,7 @@ export const grantSellerUser = async (userId: number) => {
   return response;
 };
 
-export const deleteUser = async (userId: number) => {
+export const deleteUser = async (userId: string) => {
   const token = localStorage.getItem("token");
 
   if (!token) {
@@ -148,7 +148,7 @@ export const deleteUser = async (userId: number) => {
   return response;
 };
 
-const updateUserRole = async (userId: number, role: Role) => {
+const updateUserRole = async (userId: string, role: Role) => {
   const response = await fetch(
     process.env.NEXT_PUBLIC_API_URL + `users/updateRole/${userId}`,
     {

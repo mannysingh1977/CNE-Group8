@@ -24,7 +24,7 @@ const Home: React.FC = () => {
     }
     const decodedToken = jwtDecode<DecodedToken>(token);
     const fetchUser = async () => {
-      const user = await getUser(Number(decodedToken.userId));
+      const user = await getUser(String(decodedToken.userId));
       setUser(user);
     };
     fetchUser();

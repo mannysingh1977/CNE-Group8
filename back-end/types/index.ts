@@ -1,7 +1,7 @@
 type Role = 'User' | 'Admin' | 'Owner';
 
 type AddressInput = {
-    id?: number;
+    id?: string;
     street?: string;
     houseNumber?: string;
     city?: string;
@@ -11,7 +11,7 @@ type AddressInput = {
 };
 
 type UserInput = {
-    id?: number;
+    id?: string;
     name?: string;
     phoneNumber?: string;
     emailAddress?: string;
@@ -29,7 +29,7 @@ type UserInputLogin = {
 
 type AuthenticationResponse = {
     token: string;
-    userId: number;
+    userId: string;
     email: string;
     fullname: string;
     role: Role;

@@ -2,6 +2,7 @@ import { Address } from '../model/address';
 import { User } from '../model/user';
 import { UserInput } from '../types';
 import database from './database';
+import {ObjectId} from 'mongodb';
 
 const getAllUsers = async (): Promise<User[]> => {
     try {
@@ -15,7 +16,7 @@ const getAllUsers = async (): Promise<User[]> => {
     }
 };
 
-const deleteUser = async (id: number) => {
+const deleteUser = async (id: string) => {
     try {
         const userPrisma = await database.user.delete({
             where: { id },
@@ -28,10 +29,11 @@ const deleteUser = async (id: number) => {
     }
 };
 
-const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
+const getUserById = async ({ id }: { id: string }): Promise<User | null> => {
+
     try {
         const userPrisma = await database.user.findUnique({
-            where: { id },
+            where: { id: new ObjectId(id).toString() },
             include: { address: true },
         });
 

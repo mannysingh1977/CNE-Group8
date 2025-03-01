@@ -7,6 +7,7 @@ import { generateJwtToken } from '../util/jwt';
 import bcrypt from 'bcrypt';
 import { JwtPayload } from 'jsonwebtoken';
 import { jwtDecode } from 'jwt-decode';
+import { ObjectId } from 'mongodb';
 
 export interface CustomJwtPayload extends JwtPayload {
     role: string;
@@ -16,7 +17,7 @@ const getAllUsers = async (): Promise<User[]> => {
     return [...(await userDb.getAllUsers())];
 };
 
-const getUserById = async (id: number): Promise<User | undefined> => {
+const getUserById = async (id: string): Promise<User | undefined> => {
     const user = await userDb.getUserById({ id });
     if (user) {
         return user;
@@ -176,7 +177,8 @@ const authenticate = async ({
     }
     const email = user.getName();
     const role: Role = user.getRole();
-    const userId: number | any = user.getId();
+    const userId: string | any = user.getId();
+    // console.log("Is valid id: " + ObjectId.isValid(userId))
 
     return {
         token: generateJwtToken(email, role, userId),
@@ -187,7 +189,7 @@ const authenticate = async ({
     };
 };
 
-const updateUserRole = async (id: number, role: Role): Promise<User> => {
+const updateUserRole = async (id: string, role: Role): Promise<User> => {
     const user = await getUserById(id);
     if (!user) {
         throw new Error(`User with id ${id} not found`);
@@ -199,7 +201,7 @@ const updateUserRole = async (id: number, role: Role): Promise<User> => {
     return user;
 };
 
-const grantSellerStatus = async (id: number, token: string): Promise<User> => {
+const grantSellerStatus = async (id: string, token: string): Promise<User> => {
     const user = await getUserById(id);
     const decodedToken = jwtDecode<CustomJwtPayload>(token);
     if (!user) {
@@ -212,7 +214,7 @@ const grantSellerStatus = async (id: number, token: string): Promise<User> => {
     return await userDb.updateUser(user);
 };
 
-const revokeSellerStatus = async (id: number, token: string): Promise<User> => {
+const revokeSellerStatus = async (id: string, token: string): Promise<User> => {
     const user = await getUserById(id);
 
     if (!token || token.split('.').length !== 3) {
@@ -230,7 +232,7 @@ const revokeSellerStatus = async (id: number, token: string): Promise<User> => {
     return await userDb.updateUser(user);
 };
 
-const deleteUser = async (userId: number, token: string): Promise<User | null> => {
+const deleteUser = async (userId: string, token: string): Promise<User | null> => {
     if (!token || token.split('.').length !== 3) {
         throw new Error('Invalid token format');
     }

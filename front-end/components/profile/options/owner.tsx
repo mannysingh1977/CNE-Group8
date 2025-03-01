@@ -10,7 +10,7 @@ import { Section, Store, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface ProfileProps {
-  userId?: number;
+  userId?: string;
   name: string;
   phoneNumber: string;
   emailAddress: string;
@@ -24,7 +24,7 @@ interface ProfileProps {
 const Owner: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const roles = ["Admin", "Owner", "User"];
-  const [currentUserId, setCurrentUserId] = useState<number>();
+  const [currentUserId, setCurrentUserId] = useState<string>();
 
   const getAllUsers = async () => {
     try {
@@ -53,7 +53,7 @@ const Owner: React.FC = () => {
     getAllUsers();
   }, []);
 
-  const handleRevokeSeller = (userId: number) => async () => {
+  const handleRevokeSeller = (userId: string) => async () => {
     console.log("Revoke seller", userId);
     try {
       const res = await revokeSellerUser(userId);
@@ -65,7 +65,7 @@ const Owner: React.FC = () => {
       console.log(error);
     }
   };
-  const handleGrantSeller = (userId: number) => async () => {
+  const handleGrantSeller = (userId: string) => async () => {
     console.log("Grant seller", userId);
     try {
       const res = await grantSellerUser(userId);
@@ -77,7 +77,7 @@ const Owner: React.FC = () => {
       console.log(error);
     }
   };
-  const handleDeleteuser = (userId: number) => async () => {
+  const handleDeleteuser = (userId: string) => async () => {
     console.log("Delete", userId);
     try {
       const res = await deleteUser(userId);
@@ -90,7 +90,7 @@ const Owner: React.FC = () => {
     }
   };
 
-  const handleChange = (userId: number, newRole: Role) => {
+  const handleChange = (userId: string, newRole: Role) => {
     if (userId === currentUserId) {
       const confirmChange = window.confirm(
         "Are you sure you want to change your own role? You will lose access to this page."

@@ -34,7 +34,7 @@ const Checkout: React.FC = () => {
       </Head>
       <main className="overscroll-y-contain">
         <Navbar />
-        <CheckoutComponent userId={Number(userId)} cart={cart} />
+        <CheckoutComponent userId={String(userId)} cart={cart} />
       </main>
     </>
   );

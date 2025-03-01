@@ -3,8 +3,8 @@ import database from './database';
 import { productDb } from './product.db';
 
 const addToCart = async (
-    userId: number,
-    productId: number,
+    userId: string,
+    productId: string,
     quantity: number
 ): Promise<ShoppingCart> => {
     try {
@@ -57,7 +57,7 @@ const addToCart = async (
     }
 };
 
-export const removeFromCart = async (userId: number, itemId: number) => {
+export const removeFromCart = async (userId: string, itemId: string) => {
     try {
         const cartItem = await database.cartItem.findUnique({
             where: { id: itemId },
@@ -86,7 +86,7 @@ export const removeFromCart = async (userId: number, itemId: number) => {
     }
 };
 
-const createShoppingCart = async (userId: number): Promise<ShoppingCart> => {
+const createShoppingCart = async (userId: string): Promise<ShoppingCart> => {
     try {
         const cart = await database.shoppingCart.create({
             data: {
@@ -100,7 +100,7 @@ const createShoppingCart = async (userId: number): Promise<ShoppingCart> => {
     }
 };
 
-const getCartItems = async (userId: number): Promise<ShoppingCart> => {
+const getCartItems = async (userId: string): Promise<ShoppingCart> => {
     try {
         const cart = await database.shoppingCart.findFirst({
             where: {
@@ -126,9 +126,9 @@ const getCartItems = async (userId: number): Promise<ShoppingCart> => {
 };
 
 const updateCart = async (
-    userId: number,
-    itemId: number,
-    productId: number,
+    userId: string,
+    itemId: string,
+    productId: string,
     quantity: number
 ): Promise<ShoppingCart> => {
     try {
@@ -182,7 +182,7 @@ const updateCart = async (
     }
 };
 
-export const createOrder = async (userId: number, items: any[]) => {
+export const createOrder = async (userId: string, items: any[]) => {
     console.log('Creating order for user:', userId);
     console.log('Items to be added to order:', items);
 
@@ -202,10 +202,10 @@ export const createOrder = async (userId: number, items: any[]) => {
 };
 
 const addItemToOrder = async (
-    orderId: number,
-    productId: number,
+    orderId: string,
+    productId: string,
     quantity: number,
-    shoppingCartId: number
+    shoppingCartId: string
 ) => {
     const newItem = await database.cartItem.create({
         data: {
@@ -228,7 +228,7 @@ const addItemToOrder = async (
     return newItem;
 };
 
-const getOrdersByUserId = async (userId: number) => {
+const getOrdersByUserId = async (userId: string) => {
     return await database.order.findMany({
         where: {
             userId: userId,
@@ -243,14 +243,14 @@ const getOrdersByUserId = async (userId: number) => {
     });
 };
 
-const getCartByUserId = async (userId: number) => {
+const getCartByUserId = async (userId: string) => {
     return await database.shoppingCart.findFirst({
         where: { userId },
         include: { items: { include: { product: true } } },
     });
 };
 
-const clearCart = async (userId: number) => {
+const clearCart = async (userId: string) => {
     const cart = await database.shoppingCart.findFirst({
         where: { userId },
         include: { items: true },

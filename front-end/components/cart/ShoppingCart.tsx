@@ -11,7 +11,7 @@ import {
 import type { ShoppingCart, CartItem } from "@/types/cartTypes";
 import { useTranslation } from "next-i18next";
 
-function useShoppingCart(userId: number) {
+function useShoppingCart(userId: string) {
   const [cart, setCart] = useState<ShoppingCart | null>(null);
   const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState(true);
@@ -79,7 +79,7 @@ function useShoppingCart(userId: number) {
 
   const updateQuantityInDatabase = async (
     itemId: string,
-    productId: number,
+    productId: string,
     newQuantity: number
   ) => {
     try {
@@ -128,7 +128,7 @@ function useShoppingCart(userId: number) {
     }
   };
 
-  const removeFromDatabase = async (itemId: number) => {
+  const removeFromDatabase = async (itemId: string) => {
     try {
       const token = localStorage.getItem("token");
       if (token) {
@@ -149,7 +149,7 @@ function useShoppingCart(userId: number) {
         (sum, item) => sum + item.product.price * item.quantity,
         0
       );
-      removeFromDatabase(Number(itemId));
+      removeFromDatabase(String(itemId));
       setCart({
         ...cart,
         items: updatedItems,
@@ -162,7 +162,7 @@ function useShoppingCart(userId: number) {
 }
 
 interface ShoppingCartProps {
-  userId: number;
+  userId: string;
 }
 
 export default function ShoppingCart({ userId }: ShoppingCartProps) {

@@ -6,10 +6,10 @@ import { useTranslation } from "next-i18next";
 
 const Orders: React.FC = () => {
   interface DecodedToken {
-    userId: number;
+    userId: string;
   }
   interface Product {
-    id: number;
+    id: string;
     name: string;
     description: string;
     media: string;
@@ -18,13 +18,13 @@ const Orders: React.FC = () => {
     details: string;
   }
   interface Item {
-    id: number;
+    id: string;
     quantity: number;
     productId: number;
     product: Product;
   }
   interface Order {
-    id: number;
+    id: string;
     createdAt: string;
     updatedAt: string;
     userId: number;
@@ -33,11 +33,11 @@ const Orders: React.FC = () => {
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [token, setToken] = useState<string | null>(null);
-  const [collapsed, setCollapsed] = useState<{ [key: number]: boolean }>({});
+  const [collapsed, setCollapsed] = useState<{ [key: string]: boolean }>({});
 
   const { t } = useTranslation()
 
-  const toggleCollapse = (orderId: number) => {
+  const toggleCollapse = (orderId: string) => {
     setCollapsed((prevState) => ({
       ...prevState,
       [orderId]: !prevState[orderId],
@@ -55,7 +55,7 @@ const Orders: React.FC = () => {
     const fetchOrders = async () => {
       if (token) {
         const decodedToken = jwtDecode<DecodedToken>(token);
-        const userId = Number(decodedToken.userId);
+        const userId = String(decodedToken.userId);
         const response = await getOrdersByUserId(userId, token);
         if (!response.ok) {
           console.log("Failed to fetch orders");
@@ -65,7 +65,7 @@ const Orders: React.FC = () => {
         setOrders(data);
 
         const initialCollapsedState = data.reduce(
-          (acc: { [key: number]: boolean }, order: Order) => {
+          (acc: { [key: string]: boolean }, order: Order) => {
             acc[order.id] = true;
             return acc;
           },

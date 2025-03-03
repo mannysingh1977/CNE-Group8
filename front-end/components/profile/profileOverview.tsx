@@ -15,7 +15,7 @@ import useLanguage from '../language/useLanguage';
 import ProductCatalog from './options/productcatalog';
 
 interface ProfileProps {
-  userId?: number;
+  userId?: string;
   name: string;
   phoneNumber: string;
   emailAddress: string;
@@ -30,7 +30,7 @@ const Selector: React.FC = () => {
     const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
     const [selectedOption, setSelectedOptions] = useState<string>('overview');
     const { t } = useTranslation();
-    const [userId, setUserId] = useState<number>();
+    const [userId, setUserId] = useState<string>();
     const [user, setUser] = useState<any>();
     const [admin, setAdmin] = useState<boolean>(false);
     const [owner, setOwner] = useState<boolean>(false);
@@ -79,7 +79,7 @@ const Selector: React.FC = () => {
     component: <ProductCatalog />,
   };
 
-  const fetchUser = async (userId: number) => {
+  const fetchUser = async (userId: string) => {
     try {
       const user = await UserService.getUser(userId);
       setUser(user);

@@ -3,7 +3,8 @@ import LoginForm from "@/components/login/loginForm";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import LoginTable from "@/components/loginTable/loginTable";
-import AddProduct from "@/components/addProduct/addproduct";
+import AddProduct from "@/components/addProduct/addProduct";
+import Navbar from "@/components/header/navbar";
 
 const Profile: React.FC = () => {
   const { t } = useTranslation();
@@ -20,8 +21,13 @@ const Profile: React.FC = () => {
           rel="stylesheet"
         />
       </Head>
-      <main className="min-h-screen flex flex-col justify-center gap-5 overscroll-y-contain">
+      <Navbar />
+      {/* <main className="min-h-screen flex flex-col justify-center gap-5 overscroll-y-contain">
         <AddProduct />
+      </main> */}
+      <main>
+        <p className="text-center font-bold text-2xl">We are currently working on implementing this feature.</p>
+        <p className="text-center font-bold text-2xl">Please come back later</p>
       </main>
     </>
   );

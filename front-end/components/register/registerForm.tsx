@@ -63,7 +63,6 @@ const RegisterForm: React.FC = () => {
   ) => {
     const { name, value, type } = e.target;
     let valueBool: boolean = value === "true";
-    console.log(name, value);
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -92,7 +91,7 @@ const RegisterForm: React.FC = () => {
         const data = await response.json();
         localStorage.setItem("token", data.token);
         console.log(data);
-        if (data.message === "Authentication Succesful") {
+        if (data.message === "Authentication Successful") {
           setTimeout(() => {
             window.location.href = "../";
           }, 2000);

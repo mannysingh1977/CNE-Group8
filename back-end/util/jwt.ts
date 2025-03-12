@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { Role } from '../types';
 
-const generateJwtToken = (username: string, role: Role, userId: number): string => {
+const generateJwtToken = (username: string, role: Role, userId: string): string => {
     const secret = process.env.JWT_SECRET;
     if (!secret) {
         throw new Error('JWT_SECRET is not defined');

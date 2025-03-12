@@ -1,5 +1,23 @@
-import { PrismaClient } from '@prisma/client';
+import { CosmosClient } from "@azure/cosmos";
+import dotenv from "dotenv";
 
-const database = new PrismaClient();
+dotenv.config();
 
-export default database;
+const endpoint = process.env.COSMOS_DB_ENDPOINT;
+const key = process.env.COSMOS_DB_KEY;
+const databaseId = process.env.COSMOS_DB_ID!;
+
+if (!endpoint || !key) {
+  throw new Error("Missing Cosmos DB endpoint or key in environment variables");
+}
+
+const client = new CosmosClient({
+  endpoint,
+  key,
+});
+
+const getContainer = (containerId: string) => {
+  return client.database(databaseId).container(containerId);
+};
+
+export { getContainer };

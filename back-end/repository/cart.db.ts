@@ -1,280 +1,263 @@
-import { ShoppingCart, CartItem, Order } from '@prisma/client';
-import database from './database';
+import { Container } from '@azure/cosmos';
 import { productDb } from './product.db';
+import { getContainer } from './database';
+
+const shoppingCartContainer: Container = getContainer('shoppingCart');
+const orderContainer: Container = getContainer('order');
+const productContainer: Container = getContainer('product')
+
+const getShoppingCartByUserId = async (userId: string): Promise<any | null> => {
+  const querySpec = {
+    query: "SELECT * FROM c WHERE c.userId = @userId",
+    parameters: [{ name: "@userId", value: userId }],
+  };
+  const { resources: carts } = await shoppingCartContainer.items
+    .query(querySpec)
+    .fetchAll();
+  return carts.length > 0 ? carts[0] : null;
+};
+
+const createShoppingCart = async (userId: string): Promise<any> => {
+  const cartDoc = {
+    userId,
+    items: []
+  };
+  const { resource: createdCart } = await shoppingCartContainer.items.create(cartDoc);
+  return createdCart;
+};
 
 const addToCart = async (
-    userId: string,
-    productId: string,
-    quantity: number
-): Promise<ShoppingCart> => {
-    try {
-        let cart = await database.shoppingCart.findFirst({
-            where: { userId },
-            include: { items: { include: { product: true } } },
-        });
-
-        if (!cart) {
-            cart = await database.shoppingCart.create({
-                data: { userId },
-                include: { items: { include: { product: true } } },
-            });
-        }
-
-        const product = await productDb.getProductById(productId);
-        if (!product) {
-            throw new Error('Product not found');
-        }
-
-        const existingItem = cart.items.find((item) => item.productId === productId);
-        if (existingItem) {
-            await database.cartItem.update({
-                where: { id: existingItem.id },
-                data: { quantity: existingItem.quantity + quantity },
-            });
-        } else {
-            await database.cartItem.create({
-                data: {
-                    quantity,
-                    productId,
-                    shoppingCartId: cart.id,
-                },
-            });
-        }
-
-        const updatedCart = await database.shoppingCart.findFirst({
-            where: { id: cart.id },
-            include: { items: { include: { product: true } } },
-        });
-
-        if (!updatedCart) {
-            throw new Error('Failed to update cart');
-        }
-
-        return updatedCart;
-    } catch (error) {
-        console.error(error);
-        throw new Error('Database error. See server log for details.');
+  userId: string,
+  productId: string,
+  quantity: number
+): Promise<any> => {
+  try {
+    let cart = await getShoppingCartByUserId(userId);
+    if (!cart) {
+      cart = await createShoppingCart(userId);
     }
+    const product = await productDb.getProductById(productId);
+    if (!product) {
+      throw new Error('Product not found');
+    }
+    const existingIndex = cart.items.findIndex(
+      (item: any) => item.productId === productId
+    );
+    if (existingIndex !== -1) {
+      cart.items[existingIndex].quantity += quantity;
+    } else {
+      const newItem = {
+        id: `${new Date().getTime()}-${productId}`,
+        productId,
+        quantity,
+        product: product.toCosmosDbDocument ? product.toCosmosDbDocument() : product,
+      };
+      cart.items.push(newItem);
+    }
+    const { resource: updatedCart } = await shoppingCartContainer
+      .item(cart.id, userId)
+      .replace(cart);
+    return updatedCart;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Database error. See server log for details.');
+  }
 };
 
-export const removeFromCart = async (userId: string, itemId: string) => {
-    try {
-        const cartItem = await database.cartItem.findUnique({
-            where: { id: itemId },
-        });
-
-        if (!cartItem) {
-            console.error(`Cart item not found: ${itemId}`);
-            return null;
-        }
-
-        const cart = await database.shoppingCart.findFirst({
-            where: { id: cartItem.shoppingCartId!, userId },
-        });
-
-        if (!cart) {
-            console.error(`Cart item not found or does not belong to user: ${itemId}`);
-            return null;
-        }
-
-        return await database.cartItem.delete({
-            where: { id: itemId },
-        });
-    } catch (error) {
-        console.error('Error in removeFromCart:', error);
-        throw new Error('Failed to remove item from cart.');
+export const removeFromCart = async (
+  userId: string,
+  itemId: string
+): Promise<any> => {
+  try {
+    const cart = await getShoppingCartByUserId(userId);
+    if (!cart) {
+      throw new Error('Cart not found');
     }
+    const itemIndex = cart.items.findIndex((item: any) => item.id === itemId);
+    if (itemIndex === -1) {
+      console.error(`Cart item not found: ${itemId}`);
+      return null;
+    }
+    cart.items.splice(itemIndex, 1);
+    const { resource: updatedCart } = await shoppingCartContainer
+      .item(cart.id, userId)
+      .replace(cart);
+    return updatedCart;
+  } catch (error) {
+    console.error('Error in removeFromCart:', error);
+    throw new Error('Failed to remove item from cart.');
+  }
 };
 
-const createShoppingCart = async (userId: string): Promise<ShoppingCart> => {
-    try {
-        const cart = await database.shoppingCart.create({
-            data: {
-                userId: userId,
-            },
-        });
-        return cart;
-    } catch (error) {
-        console.error(error);
-        throw new Error('Database error. See server log for details.');
+const getCartItems = async (userId: string): Promise<any> => {
+  try {
+    let cart = await getShoppingCartByUserId(userId);
+    if (!cart) {
+      cart = await createShoppingCart(userId);
     }
-};
-
-const getCartItems = async (userId: string): Promise<ShoppingCart> => {
-    try {
-        const cart = await database.shoppingCart.findFirst({
-            where: {
-                userId: userId,
-            },
-            include: {
-                items: {
-                    include: {
-                        product: true,
-                    },
-                },
-            },
-        });
-        if (!cart) {
-            const cart = await createShoppingCart(userId);
-            return cart;
-        }
-        return cart;
-    } catch (error) {
-        console.error(`Error in getCartItems for userId: ${userId}`, error);
-        throw new Error('Database error. See server log for details.');
-    }
+    return cart;
+  } catch (error) {
+    console.error(`Error in getCartItems for userId: ${userId}`, error);
+    throw new Error('Database error. See server log for details.');
+  }
 };
 
 const updateCart = async (
-    userId: string,
-    itemId: string,
-    productId: string,
-    quantity: number
-): Promise<ShoppingCart> => {
-    try {
-        const cart = await database.shoppingCart.findFirst({
-            where: { userId },
-            include: { items: { include: { product: true } } },
-        });
-
-        if (!cart) {
-            throw new Error('Cart not found');
-        }
-
-        console.log(`Cart found for user ${userId}:`, cart);
-        console.log(`productId: ${cart.items[0].product.id}`);
-
-        const existingItem = cart.items.find(
-            (item) => item.id === itemId && item.productId === productId
-        );
-        if (!existingItem) {
-            console.error(`Product with ID ${productId} not found in cart for user ${userId}`);
-            console.log(
-                `Available product IDs in cart: ${cart.items
-                    .map((item) => item.productId)
-                    .join(', ')}`
-            );
-            throw new Error('Product not found in cart');
-        }
-
-        console.log(`Updating quantity for product ${productId} to ${quantity}`);
-
-        await database.cartItem.update({
-            where: { id: existingItem.id },
-            data: { quantity },
-        });
-
-        const updatedCart = await database.shoppingCart.findFirst({
-            where: { id: cart.id },
-            include: { items: { include: { product: true } } },
-        });
-
-        if (!updatedCart) {
-            throw new Error('Failed to update cart');
-        }
-
-        console.log(`Cart updated for user ${userId}:`, updatedCart);
-
-        return updatedCart;
-    } catch (error) {
-        console.error(error);
-        throw new Error('Database error. See server log for details.');
+  userId: string,
+  itemId: string,
+  productId: string,
+  quantity: number
+): Promise<any> => {
+  try {
+    const cart = await getShoppingCartByUserId(userId);
+    if (!cart) {
+      throw new Error('Cart not found');
     }
+    const itemIndex = cart.items.findIndex(
+      (item: any) => item.id === itemId && item.productId === productId
+    );
+    if (itemIndex === -1) {
+      console.error(
+        `Product with ID ${productId} not found in cart for user ${userId}`
+      );
+      throw new Error('Product not found in cart');
+    }
+    cart.items[itemIndex].quantity = quantity;
+    const { resource: updatedCart } = await shoppingCartContainer
+      .item(cart.id, userId)
+      .replace(cart);
+    return updatedCart;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Database error. See server log for details.');
+  }
 };
 
-export const createOrder = async (userId: string, items: any[]) => {
-    console.log('Creating order for user:', userId);
-    console.log('Items to be added to order:', items);
-
-    const newOrder = await database.order.create({
-        data: {
-            userId: userId,
-            items: {
-                create: items.map((item) => ({
-                    productId: item.productId,
-                    quantity: item.quantity,
-                })),
-            },
-        },
-    });
-
+export const createOrder = async (
+  userId: string,
+  items: any[]
+): Promise<any> => {
+  try {
+    const orderDoc = {
+      userId,
+      items: items.map(item => ({
+        // Generate a simple id for the order item.
+        id: `${new Date().getTime()}-${item.productId}`,
+        productId: item.productId,
+        quantity: item.quantity,
+      })),
+      createdAt: new Date().toISOString(),
+    };
+    const { resource: newOrder } = await orderContainer.items.create(orderDoc);
     return newOrder;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to create order.');
+  }
 };
 
 const addItemToOrder = async (
-    orderId: string,
-    productId: string,
-    quantity: number,
-    shoppingCartId: string
-) => {
-    const newItem = await database.cartItem.create({
-        data: {
-            orderId: orderId,
-            productId: productId,
-            quantity: quantity,
-            shoppingCartId: shoppingCartId,
-        },
-    });
-
-    await database.order.update({
-        where: { id: orderId },
-        data: {
-            items: {
-                connect: { id: newItem.id },
-            },
-        },
-    });
-
-    return newItem;
-};
-
-const getOrdersByUserId = async (userId: string) => {
-    return await database.order.findMany({
-        where: {
-            userId: userId,
-        },
-        include: {
-            items: {
-                include: {
-                    product: true,
-                },
-            },
-        },
-    });
-};
-
-const getCartByUserId = async (userId: string) => {
-    return await database.shoppingCart.findFirst({
-        where: { userId },
-        include: { items: { include: { product: true } } },
-    });
-};
-
-const clearCart = async (userId: string) => {
-    const cart = await database.shoppingCart.findFirst({
-        where: { userId },
-        include: { items: true },
-    });
-    if (!cart) {
-        throw new Error('Cart not found');
+  orderId: string,
+  productId: string,
+  quantity: number
+): Promise<any> => {
+  try {
+    const { resource: orderDoc } = await orderContainer
+      .item(orderId, orderId)
+      .read();
+    if (!orderDoc) {
+      throw new Error('Order not found');
     }
-    await database.cartItem.deleteMany({
-        where: {
-            shoppingCartId: cart.id,
-        },
-    });
-
-    return cart;
+    const newItem = {
+      id: `${new Date().getTime()}-${productId}`,
+      productId,
+      quantity,
+    };
+    orderDoc.items.push(newItem);
+    await orderContainer.item(orderId, orderId).replace(orderDoc);
+    return newItem;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to add item to order.');
+  }
 };
+
+const getOrdersByUserId = async (userId: string): Promise<any[]> => {
+  try {
+    const querySpec = {
+      query: "SELECT * FROM c WHERE c.userId = @userId",
+      parameters: [{ name: "@userId", value: userId }],
+    };
+
+    const { resources: orders } = await orderContainer.items
+      .query(querySpec)
+      .fetchAll();
+
+    if (!orders.length) {
+      return [];
+    }
+
+    const populatedOrders = await Promise.all(
+      orders.map(async (order) => {
+        const populatedItems = await Promise.all(
+          order.items.map(async (item: { productId: string; quantity: number }) => {
+            const productQuery = {
+              query: "SELECT * FROM c WHERE c.id = @productId",
+              parameters: [{ name: "@productId", value: item.productId }],
+            };
+
+            const { resources: product } = await productContainer.items
+              .query(productQuery)
+              .fetchAll();
+
+            return {
+              ...item,
+              product: product[0] || { id: item.productId, error: "Product not found" },
+            };
+          })
+        );
+
+        return { ...order, items: populatedItems };
+      })
+    );
+
+    return populatedOrders;
+  } catch (error) {
+    console.error("Error fetching orders with product details:", error);
+    throw new Error("Database error. See server log for details.");
+  }
+};
+
+const clearCart = async (userId: string): Promise<any> => {
+  try {
+    const cart = await getShoppingCartByUserId(userId);
+    if (!cart) {
+      throw new Error('Cart not found');
+    }
+    cart.items = [];
+    const { resource: updatedCart } = await shoppingCartContainer
+      .item(cart.id, userId)
+      .replace(cart);
+    return updatedCart;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Database error. See server log for details.');
+  }
+};
+
+const getCartByUserId = async (userId: string): Promise<any> => {
+  return await getCartItems(userId);
+};
+
 export default {
-    addToCart,
-    removeFromCart,
-    getCartItems,
-    createShoppingCart,
-    updateCart,
-    createOrder,
-    addItemToOrder,
-    getOrdersByUserId,
-    clearCart,
-    getCartByUserId,
+  addToCart,
+  removeFromCart,
+  getCartItems,
+  createShoppingCart,
+  updateCart,
+  createOrder,
+  addItemToOrder,
+  getOrdersByUserId,
+  clearCart,
+  getCartByUserId,
 };

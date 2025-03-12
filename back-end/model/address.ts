@@ -1,7 +1,5 @@
-import {Address as AddressPrisma} from '@prisma/client'
-
 export class Address {
-    private id: string | undefined;
+    private id?: string;
     private street: string;
     private houseNumber: string;
     private city: string;
@@ -9,134 +7,112 @@ export class Address {
     private postalCode: string;
     private country: string;
 
-    constructor(address: { street: string, city: string, state: string, houseNumber: string, postalCode: string, country: string, id?: string | undefined }) {
-        this.validate(address);
-        this.id = address.id;
-        this.street = address.street;
-        this.houseNumber = address.houseNumber;
-        this.city = address.city;
-        this.state = address.state;
-        this.postalCode = address.postalCode;
-        this.country = address.country;
-    };
+    constructor(address: {
+      street: string;
+      houseNumber: string;
+      city: string;
+      state: string;
+      postalCode: string;
+      country: string;
+      id?: string;
+    }) {
+      this.validate(address);
+      this.id = address.id;
+      this.street = address.street;
+      this.houseNumber = address.houseNumber;
+      this.city = address.city;
+      this.state = address.state;
+      this.postalCode = address.postalCode;
+      this.country = address.country;
+    }
 
-    validate(address: { street: string, city: string, state: string, houseNumber: string, postalCode: string, country: string, id?: string | undefined }) {
-        if (!address.street) {
-            throw new Error('Street is required')
-        }
-        if (!address.houseNumber) {
-            throw new Error('House number is required')
-        }
-        if (!address.city) {
-            throw new Error('City is required')
-        }
-        if (!address.state) {
-            throw new Error('State is required')
-        }
-        if (!address.postalCode) {
-            throw new Error('Postal code is required')
-        }
-        if (!address.country) {
-            throw new Error('Country is required')
-        }
+    validate(address: {
+      street: string;
+      houseNumber: string;
+      city: string;
+      state: string;
+      postalCode: string;
+      country: string;
+      id?: string;
+    }) {
+      if (!address.street) {
+        throw new Error('Street is required');
+      }
+      if (!address.houseNumber) {
+        throw new Error('House number is required');
+      }
+      if (!address.city) {
+        throw new Error('City is required');
+      }
+      if (!address.state) {
+        throw new Error('State is required');
+      }
+      if (!address.postalCode) {
+        throw new Error('Postal code is required');
+      }
+      if (!address.country) {
+        throw new Error('Country is required');
+      }
     }
 
     public getId(): string | undefined {
-        return this.id;
-    };
+      return this.id;
+    }
 
     public getStreet(): string {
-        return this.street;
+      return this.street;
     }
 
     public getHouseNumber(): string {
-        return this.houseNumber
+      return this.houseNumber;
     }
 
     public getCity(): string {
-        return this.city;
+      return this.city;
     }
 
     public getState(): string {
-        return this.state;
+      return this.state;
     }
 
     public getPostalCode(): string {
-        return this.postalCode;
+      return this.postalCode;
     }
 
     public getCountry(): string {
-        return this.country;
+      return this.country;
     }
 
     public equals(address: Address): boolean {
-        return (
-            this.street == address.street &&
-            this.houseNumber == address.houseNumber &&
-            this.city == address.city &&
-            this.state == address.state &&
-            this.postalCode == address.postalCode &&
-            this.country == address.country
-        );
+      return (this.getStreet() == address.getStreet()
+        && this.getHouseNumber() == address.getHouseNumber()
+        && this.getPostalCode() == address.getPostalCode()
+        && this.getState() == address.getState()
+        && this.getCity() == address.getCity()
+        && this.getCountry() == address.getCountry() )
     }
 
-    static from({
-        street,
-        houseNumber,
-        city,
-        state,
-        postalCode,
-        country
-    }: AddressPrisma & { id?: string }) {
-        return new Address({
-            id: undefined,
-            street,
-            houseNumber,
-            city,
-            state,
-            postalCode,
-            country
-        })
+    toObject(): object {
+      return {
+        id: this.id,
+        street: this.street,
+        houseNumber: this.houseNumber,
+        city: this.city,
+        state: this.state,
+        postalCode: this.postalCode,
+        country: this.country,
+      };
     }
 
-    // public setId(id: number): void {
-    //     this.id = id;
-    // }
-
-    // public setStreet(street: string): void {
-    //     this.street = street;
-    // }
-
-    // public setCity(city: string): void {
-    //     this.city = city;
-    // }
-
-    // public setState(state: string): void {
-    //     this.state = state;
-    // }
-
-    // public setPostalCode(postalCode: string): void {
-    //     this.postalCode = postalCode;
-    // }
-
-    // public setCountry(country: string): void {
-    //     this.country = country;
-    // }
-}
-
-/*
-scheduleRouter.post('/', (req: Resuest, res:Response) =>{
-    try{
-        const Schedule = <ScheduleInput>req.body;
-        const result = scheduleService.createSchedule(schedule);
-        res.status(200).json(result);
-    } catch (error: unknown){
-        let msg= "unknown error";
-        if(error instanceof Error){
-            msg = error.message;
-        }
+    static fromObject(address: {
+      street: string;
+      houseNumber: string;
+      city: string;
+      state: string;
+      postalCode: string;
+      country: string;
+      id?: string;
+    }): Address {
+      return new Address(address);
     }
-});
-
-
-*/
+  }

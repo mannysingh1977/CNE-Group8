@@ -105,7 +105,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
 import { UserInput, UserInputLogin } from '../types';
-import { ObjectId } from 'mongodb';
 
 const userRouter = express.Router();
 
@@ -160,13 +159,13 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  */
 userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userInput = <UserInputLogin>req.body;
-        const response = await userService.authenticate(userInput);
-        res.status(200).json({ message: 'Authentication Succesful', ...response });
+      const userInput = req.body as UserInputLogin;
+      const response = await userService.authenticate(userInput);
+      res.status(200).json(response);
     } catch (error) {
-        next(error);
+      next(error);
     }
-});
+  });
 
 /**
  * @swagger
@@ -189,7 +188,7 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
  */
 userRouter.post('/register', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userInput = <UserInput>req.body;
+        const userInput = req.body as UserInput;
         const user = await userService.addUser(userInput);
         res.status(200).json(user);
     } catch (error) {
@@ -221,13 +220,11 @@ userRouter.post('/register', async (req: Request, res: Response, next: NextFunct
 userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = req.params.id;
-        if (ObjectId.isValid(userId)) {
-            const objectId = new ObjectId(userId);
-            const user = await userService.getUserById(objectId.toString());
-            res.status(200).send(user);
-        } else {
-            res.status(400).send({ error: 'Invalid user id provided' });
+        if (!userId || typeof userId !== 'string' || userId.trim() === '') {
+            return res.status(400).send({ error: 'Invalid user id provided' });
         }
+        const user = await userService.getUserById(userId);
+        res.status(200).send(user);
     } catch (error) {
         next(error);
     }
@@ -265,9 +262,9 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  */
 userRouter.put('/updateRole/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userId = new ObjectId(req.params.userId);
+        const userId = req.params.userId;
         const { role } = req.body;
-        const updatedUser = await userService.updateUserRole(userId.toString(), role);
+        const updatedUser = await userService.updateUserRole(userId, role);
         res.status(200).json(updatedUser);
     } catch (error) {
         next(error);
@@ -276,40 +273,35 @@ userRouter.put('/updateRole/:userId', async (req: Request, res: Response, next: 
 
 userRouter.put('/seller/grant/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userId = new ObjectId(req.params.userId);
+        const userId = req.params.userId;
         const token = req.body.token;
-        const updatedUser = await userService.grantSellerStatus(userId.toString(), String(token));
+        const updatedUser = await userService.grantSellerStatus(userId, String(token));
         res.status(200).json(updatedUser);
     } catch (error) {
         next(error);
     }
 });
 
-userRouter.put(
-    '/seller/revoke/:userId',
-    async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const userId = new ObjectId(req.params.userId);
-            const token = req.body.token;
-            const updatedUser = await userService.revokeSellerStatus(userId.toString(), String(token));
-            res.status(200).json(updatedUser);
-        } catch (error) {
-            next(error);
-        }
+userRouter.put('/seller/revoke/:userId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.params.userId;
+        const token = req.body.token;
+        const updatedUser = await userService.revokeSellerStatus(userId, String(token));
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        next(error);
     }
-);
+});
 
-userRouter.delete(
-    '/seller/remove/:userId',
-    async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const userId = new ObjectId(req.params.userId);
-            const token = req.body.token;
-            const deletedUser = await userService.deleteUser(userId.toString(), String(token));
-            res.status(200);
-        } catch (error) {
-            next(error);
-        }
+userRouter.delete('/seller/remove/:userId', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.params.userId;
+        const token = req.body.token;
+        const deletedUser = await userService.deleteUser(userId, String(token));
+        res.status(200).json(deletedUser);
+    } catch (error) {
+        next(error);
     }
-);
+});
+
 export { userRouter };

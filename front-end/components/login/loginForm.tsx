@@ -74,7 +74,7 @@ const LoginForm: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("token", data.token);
-        if (data.message === "Authentication Succesful") {
+        if (data.message === "Authentication Successful") {
           window.location.href = "../";
         } else {
           alert("Invalid email or password");

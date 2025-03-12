@@ -21,6 +21,10 @@
  *     delete:
  *       tags:
  *       - Cart
+ *   /cart/orders/{userId}:
+ *     get:
+ *       tags:
+ *       - Cart
  * components:
  *   securitySchemes:
  *     bearerAuth:
@@ -33,6 +37,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import cartService from '../service/cart.service';
 
 const cartRouter = express.Router();
+
 /**
  * @swagger
  * /cart/items/{userId}:
@@ -72,7 +77,8 @@ const cartRouter = express.Router();
  */
 cartRouter.get('/items/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.send(await cartService.getCartItems(String(req.params.userId)));
+        const cartItems = await cartService.getCartItems(req.params.userId);
+        res.send(cartItems);
     } catch (error) {
         next(error);
     }
@@ -122,13 +128,9 @@ cartRouter.get('/items/:userId', async (req: Request, res: Response, next: NextF
  */
 cartRouter.post('/add/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.send(
-            await cartService.addToCart(
-                String(req.params.userId),
-                String(req.body.productId),
-                Number(req.body.quantity)
-            )
-        );
+        const { productId, quantity } = req.body;
+        const result = await cartService.addToCart(req.params.userId, productId, Number(quantity));
+        res.send(result);
     } catch (error) {
         next(error);
     }
@@ -159,7 +161,7 @@ cartRouter.post('/add/:userId', async (req: Request, res: Response, next: NextFu
  *                 type: string
  *     responses:
  *       200:
- *         description: Item added to the cart
+ *         description: Item removed from the cart
  *         content:
  *           application/json:
  *             schema:
@@ -172,11 +174,10 @@ cartRouter.post('/add/:userId', async (req: Request, res: Response, next: NextFu
  *       404:
  *         description: User not found
  */
-cartRouter.delete('/remove/:userId/', async (req: Request, res: Response, next: NextFunction) => {
+cartRouter.delete('/remove/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.send(
-            await cartService.removeFromCart(String(req.params.userId), String(req.body.productId))
-        );
+        const result = await cartService.removeFromCart(req.params.userId, req.body.productId);
+        res.send(result);
     } catch (error) {
         next(error);
     }
@@ -231,14 +232,8 @@ cartRouter.delete('/remove/:userId/', async (req: Request, res: Response, next: 
 cartRouter.put('/update/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { itemId, productId, quantity } = req.body;
-        res.send(
-            await cartService.updateCart(
-                String(req.params.userId),
-                String(productId),
-                Number(quantity),
-                String(itemId)
-            )
-        );
+        const result = await cartService.updateCart(req.params.userId, productId, Number(quantity), itemId);
+        res.send(result);
     } catch (error) {
         next(error);
     }
@@ -291,15 +286,9 @@ cartRouter.put('/update/:userId', async (req: Request, res: Response, next: Next
  */
 cartRouter.delete('/checkout/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { userId } = req.params;
-        console.log("User id in route: " + userId)
         const { cart } = req.body;
-
-        console.log('Received cart for checkout:', cart);
-
-        const newOrder = await cartService.checkout(String(userId), cart);
-
-        res.status(200).send(newOrder);
+        const result = await cartService.checkout(req.params.userId, cart);
+        res.status(200).send(result);
     } catch (error) {
         next(error);
     }
@@ -335,9 +324,8 @@ cartRouter.delete('/checkout/:userId', async (req: Request, res: Response, next:
  */
 cartRouter.get('/orders/:userId', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const response = await cartService.getOrdersByUserId(String(req.params.userId));
-        console.log('Orders fetched routes:', response);
-        res.send(response);
+        const orders = await cartService.getOrdersByUserId(req.params.userId);
+        res.send(orders);
     } catch (error) {
         next(error);
     }

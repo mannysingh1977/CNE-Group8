@@ -1,44 +1,60 @@
-import { CartItem, User } from "@prisma/client";
-import { Product } from "./product";
+import { User } from './user';
+import { Product } from './product';
 
-//No validation is needed for this class, because there is no input given to construct the object
-interface ShoppingCartPrisma {
+interface ShoppingCartCosmosDb {
   id?: string;
-  user: User;
-  items: Array<CartItem>;
+  userId: string;
+  items: Array<{ productId: string; quantity: number }>;
 }
-export class ShoppingCart {
-  private id: string | undefined;
-  private items: Array<CartItem>;
-  private user: User;
 
-  constructor(shoppingCart: { id?: string | undefined; user: User }) {
+export class ShoppingCart {
+  private id?: string;
+  private userId: string;
+  private items: Array<{ productId: string; quantity: number }>;
+
+  constructor(shoppingCart: { id?: string; userId: string }) {
     this.id = shoppingCart.id;
+    this.userId = shoppingCart.userId;
     this.items = [];
-    this.user = shoppingCart.user;
   }
 
   public getId(): string | undefined {
     return this.id;
   }
 
-  public getItems(): Array<CartItem> {
+  public getItems(): Array<{ productId: string; quantity: number }> {
     return this.items;
   }
 
-  public getUser(): User {
-    return this.user;
+  public getUserId(): string {
+    return this.userId;
   }
 
-  // public addProduct(item: Product): Product {
-  //     this.items.push(item);
-  //     console.log(this.items);
-  //     return item;
-  // }
+  public addItem(productId: string, quantity: number): void {
+    const existingItem = this.items.find(item => item.productId === productId);
+    if (existingItem) {
+      existingItem.quantity += quantity;
+    } else {
+      this.items.push({ productId, quantity });
+    }
+  }
 
-  static from({ id, items, user }: ShoppingCartPrisma): ShoppingCart {
-    const shoppingCart = new ShoppingCart({ id, user });
-    shoppingCart.items = items;
+  static fromDocument(data: ShoppingCartCosmosDb): ShoppingCart {
+    const shoppingCart = new ShoppingCart({ id: data.id, userId: data.userId });
+    shoppingCart.items = data.items;
     return shoppingCart;
+  }
+
+  equals(shoppingCart: ShoppingCart): boolean {
+    if (this.userId !== shoppingCart.userId) {
+      return false;
+    }
+    if (this.items.length !== shoppingCart.items.length) {
+      return false;
+    }
+    return this.items.every((item, index) =>
+      item.productId === shoppingCart.items[index].productId &&
+      item.quantity === shoppingCart.items[index].quantity
+    );
   }
 }

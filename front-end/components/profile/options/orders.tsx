@@ -104,25 +104,28 @@ const Orders: React.FC = () => {
             </div>
             {!collapsed[order.id] && (
               <ul>
-                {order.items.map((item) => (
-                  <li key={item.id} className="flex flex-row items-center">
-                    <img
-                      src={item.product.media}
-                      alt={item.product.name}
-                      width="100"
-                    />
-                    <div className="flex flex-col ml-4 w-full h-full">
-                      <p>{t('order.productname')}: {item.product.name}</p>
-                      <p>{t('order.quantity')}: {item.quantity}</p>
-                      <p>{t('order.price')}: ${item.product.price}</p>
-                    </div>
-                    <div className="flex flex-col ml-4 w-full h-full justify-start">
-                      <p className="w-full min-h-full">
-                      {t('order.description')}: {item.product.description}
-                      </p>
-                    </div>
-                  </li>
-                ))}
+                {order.items.map((item) => {
+                  console.log(item);
+                  return (
+                    <li key={item.id} className="flex flex-row items-center">
+                      <img
+                        src={item.product.media}
+                        alt={item.product.name}
+                        width="100"
+                      />
+                      <div className="flex flex-col ml-4 w-full h-full">
+                        <p>{t('order.productname')}: {item.product.name}</p>
+                        <p>{t('order.quantity')}: {item.quantity}</p>
+                        <p>{t('order.price')}: ${item.product.price}</p>
+                      </div>
+                      <div className="flex flex-col ml-4 w-full h-full justify-start">
+                        <p className="w-full min-h-full">
+                        {t('order.description')}: {item.product.description}
+                        </p>
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>

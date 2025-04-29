@@ -17,4 +17,17 @@ reviewRouter.get('/:productId', async (req: Request, res: Response, next: NextFu
     }
 });
 
+reviewRouter.post("/addReview", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const productId = req.body.productId;
+        const userId = req.body.userId;
+        const reviewText = req.body.reviewText;
+        const stars = req.body.stars
+        const createdReview = await reviewService.createReview(productId, userId, reviewText, stars);
+        res.send(createdReview);
+    } catch (error) {
+        next(error);
+    }
+})
+
 export { reviewRouter };

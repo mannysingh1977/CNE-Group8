@@ -36,6 +36,17 @@ const getReviewByProductId = async ({ productId }: { productId: string }): Promi
     }
 };
 
+const createReview = (productId: string, userId: string, reviewText: string, stars: number): Promise<Review> => {
+    const review = new Review({userId, productId, reviewText, stars})
+    return reviewContainer.items.create({ ...review }).then(response => {
+        return mapToReview(response.resource);
+    }).catch(error => {
+        console.log(error);
+        throw new Error("Failed to create review, See server log for details");
+    });
+}
+
 export default {
     getReviewByProductId,
+    createReview
 }

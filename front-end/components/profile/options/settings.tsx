@@ -7,7 +7,7 @@ import { Address, Role } from "@/types/types";
 import AnimatedCheckbox from "../../register/AnimatedCheckbox";
 
 interface ProfileProps {
-    userId?: number;
+    userId?: string;
     name: string;
     phoneNumber: string;
     emailAddress: string;
@@ -21,11 +21,11 @@ interface ProfileProps {
 
 const Settings: React.FC = () => {
     const { t } = useTranslation();
-    const [userId, setUserId] = useState<number>()
+    const [userId, setUserId] = useState<string>()
     const [user, setUser] = useState<any>(null);
     const [seller, setSeller] = useState<boolean>(false);
 
-    const fetchUser = async (userId: number) => {
+    const fetchUser = async (userId: string) => {
         try {
             const user = await UserService.getUser(userId);
             setUser(user);

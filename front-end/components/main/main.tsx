@@ -11,12 +11,15 @@ import { fetchProducts } from "@/services/mainService";
 import { useRouter } from "next/router";
 
 interface Product {
-  id: number;
+  id: string;
   name: string;
   price: number;
   media: string;
   stock: number;
-  details: string
+  details: string;
+  updatedAt: string;
+  createdAt: string;
+  description: string;
 }
 interface Message {
   id: string;
@@ -67,7 +70,7 @@ export default function Home() {
   }, [amountLoaded10]);
 
   const router = useRouter();
-  const handleClick = (id: number) => {
+  const handleClick = (id: string) => {
     const token = localStorage.getItem('token')
     if (token) {
       router.push(`/products/${id}`);

@@ -53,7 +53,7 @@ const Admin: React.FC = () => {
         const sortedData = data.sort((a: User, b: User) => {
           if (a.id === undefined) return 1;
           if (b.id === undefined) return -1;
-          return a.id - b.id;
+          return Number(a.id) - Number(b.id);
         });
         setUsers(sortedData);
       }
@@ -65,7 +65,7 @@ const Admin: React.FC = () => {
     loadUsers();
   }, [users]);
 
-  const handleRevokeSeller = (userId: number) => async () => {
+  const handleRevokeSeller = (userId: string) => async () => {
     console.log("Revoke seller", userId);
     try {
       const res = await revokeSellerUser(userId);
@@ -77,7 +77,7 @@ const Admin: React.FC = () => {
       console.log(error);
     }
   };
-  const handleGrantSeller = (userId: number) => async () => {
+  const handleGrantSeller = (userId: string) => async () => {
     console.log("Grant seller", userId);
     try {
       const res = await grantSellerUser(userId);
@@ -89,7 +89,7 @@ const Admin: React.FC = () => {
       console.log(error);
     }
   };
-  const handleDeleteuser = (userId: number) => async () => {
+  const handleDeleteuser = (userId: string) => async () => {
     console.log("Delete", userId);
     try {
       const res = await deleteUser(userId);

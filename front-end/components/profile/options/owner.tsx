@@ -29,7 +29,7 @@ const Owner: React.FC = () => {
   const getAllUsers = async () => {
     try {
       const users = await UserService.getAllUsers();
-      users.sort((a: User, b: User) => (a.id ?? 0) - (b.id ?? 0));
+      users.sort((a: User, b: User) => (Number(a.id) || 0) - (Number(b.id) || 0));
       setUsers(users);
     } catch (error) {
       console.error("Failed to fetch data:", error);

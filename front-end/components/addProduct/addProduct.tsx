@@ -20,7 +20,7 @@ const addProduct: React.FC = () => {
     stock: 0,
     price: 0,
     details: "",
-    userId: 0,
+    userId: "",
   });
 
   const customStyleModal = {

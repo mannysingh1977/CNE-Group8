@@ -6,7 +6,7 @@ import { Address, Role } from '@/types/types';
 import { useTranslation } from 'next-i18next';
 
 interface ProfileProps {
-    userId?: number;
+    userId?: string;
     name: string;
     phoneNumber: string;
     emailAddress: string;
@@ -18,7 +18,7 @@ interface ProfileProps {
 }
 
 const Overview: React.FC = () => {
-    const [userId, setUserId] = useState<number>()
+    const [userId, setUserId] = useState<string>()
     const [user, setUser] = useState<any>(null);
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
@@ -33,7 +33,7 @@ const Overview: React.FC = () => {
     const [isSeller, setIsSeller] = useState<string>("");
     const {t} = useTranslation();
 
-    const fetchUser = async (userId: number) => {
+    const fetchUser = async (userId: string) => {
         try {
             const user = await UserService.getUser(userId);
             setUser(user);

@@ -9,7 +9,7 @@ export default function ProductCatalog() {
   if (!token) {
     return <div>Unauthorized</div>;
   }
-  const decodedToken = jwtDecode<{ userId: number }>(token);
+  const decodedToken = jwtDecode<{ userId: string }>(token);
 
   const loadProductCatalog = async () => {
     const productCatalog = await getProductCatalog(decodedToken.userId);

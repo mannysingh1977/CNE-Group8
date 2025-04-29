@@ -1,3 +1,4 @@
+import ProductById from "@/pages/products/[productId]";
 import { addProductType, Product } from "@/types/cartTypes";
 import { jwtDecode } from "jwt-decode";
 
@@ -61,3 +62,22 @@ export const getProductCatalog = async (userId: string) => {
     }
     return res;
 };
+
+export const getReviewsForProduct = async (productId: string) => {
+    console.log('Getting the productId: ', productId);
+    const token = localStorage.getItem("token");
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}review/${productId}`,
+        {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            method: 'GET',
+        }
+    )
+    if (!res.ok) {
+        throw new Error("Failed to fetch reviews");
+    }
+    return res;
+}

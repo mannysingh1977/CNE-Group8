@@ -1,12 +1,13 @@
 import { Product } from "@/types/cartTypes"
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react"
-import { getProductById as fetchProduct } from "../../services/productService";
+import { getProductById as fetchProduct, getReviewsForProduct } from "../../services/productService";
 import Navbar from "@/components/header/navbar";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { jwtDecode } from "jwt-decode";
-import { Plus } from "lucide-react";
+import { Plus, Star } from "lucide-react";
+import { Review } from "@/types/types";
 
 interface ProductCardProps {
     name: string;
@@ -18,6 +19,7 @@ interface ProductCardProps {
 
 const ProductById = ({ onMessage }: { onMessage: (text: string) => void }) => {
     const [product, setProduct] = useState<Product | null>(null);
+    const [reviews, setReviews] = useState<Array<Review> | []>([])
     const [statusMessage, setStatusMessage] = useState<string>('');
 
     useEffect(() => {
@@ -43,8 +45,17 @@ const ProductById = ({ onMessage }: { onMessage: (text: string) => void }) => {
         setProduct(product);
     }
 
+    const getReviewsByProductId = async (productId: string) => {
+        const reviewResponse = await getReviewsForProduct(String(productId));
+        const reviews = await reviewResponse.json();
+        setReviews(reviews);
+    }
+
     useEffect(() => {
-        if (productId) getProductById();
+        if (productId) {
+            getProductById();
+            getReviewsByProductId(String(productId));
+        }
     }, [productId]);
 
     const addToCart = async (productId: string, event: React.MouseEvent) => {
@@ -109,6 +120,23 @@ const ProductById = ({ onMessage }: { onMessage: (text: string) => void }) => {
                     )}
                     <div className="flex justify-center mt-5">
                         <p className="font-bold text-xl text-gray-700">{t('product.details')}: <span className="text-gray-600">{product.details}</span></p>
+                    </div>
+                    <h5 className="text-2xl font-bold mt-8 mb-4">{t('product.reviews')}</h5>
+                    <div className="space-y-4">
+                        {reviews.length > 0 ? (
+                            reviews.map((review, index) => (
+                                <div key={index} className="p-4 border rounded-lg shadow-sm">
+                                    <p className="text-gray-600">{review.reviewText}</p>
+                                    <div className="flex items-center space-x-1">
+                                        {Array.from({ length: review.stars ?? 0 }, (_, i) => (
+                                            <Star key={i} size={16} className="text-yellow-500 fill-current" />
+                                        ))}
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="text-gray-500">This product has no reviews</p>
+                        )}
                     </div>
                 </div>
             ) : (

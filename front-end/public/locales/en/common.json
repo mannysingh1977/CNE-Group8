@@ -51,7 +51,8 @@
     "disclaimer": "*We currently only support adding images via a link. We don't support uploading your own images",
     "success": "Product added successfully",
     "redirect": "You will be redirected to the homepage in 3 seconds",
-    "hurry": "Hurry, only a few items left in stock!"
+    "hurry": "Hurry, only a few items left in stock!",
+    "reviews": "Reviews"
   },
   "cart": {
     "title": "Shopping Cart",

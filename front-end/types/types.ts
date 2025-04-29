@@ -29,3 +29,11 @@ export type Address = {
 };
 
 export type Role = 'User' | 'Admin' | 'Owner';
+
+export type Review = {
+    id?: string;
+    userId?: string;
+    productReview?: string;
+    reviewText?: string;
+    stars?: number;
+}

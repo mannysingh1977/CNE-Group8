@@ -11,6 +11,7 @@ import { expressjwt } from 'express-jwt';
 import cartRouter from './controller/cart.routes';
 import helmet from 'helmet';
 import uploadRouter from './controller/upload.routes';
+import { reviewRouter } from './controller/review.routes';
 
 const app = express();
 dotenv.config();
@@ -61,6 +62,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/users', userRouter);
 app.use('/products', productRouter);
 app.use('/cart', cartRouter);
+app.use('/review', reviewRouter);
 
 app.use(errorHandler);
 

@@ -20,6 +20,7 @@ async function seedDatabase() {
   const usersContainer = database.container("user");
   const addressesContainer = database.container("address");
   const productsContainer = database.container("product");
+  const reviewContainer = database.container("review")
 
   // Create Addresses
   const addresses = [
@@ -64,6 +65,41 @@ async function seedDatabase() {
 
   for (const product of products) {
     await productsContainer.items.upsert(product);
+  }
+
+  const reviews = [
+    { id: "1", userId: "1", productId: "1", reviewText: "Good sound" },
+    { id: "2", userId: "2", productId: "1", reviewText: "Very comfortable to wear" },
+    { id: "3", userId: "3", productId: "1", reviewText: "Battery lasts long" },
+    { id: "4", userId: "1", productId: "2", reviewText: "Great camera quality" },
+    { id: "5", userId: "2", productId: "2", reviewText: "Very fast and smooth" },
+    { id: "6", userId: "3", productId: "2", reviewText: "Love the design" },
+    { id: "7", userId: "1", productId: "3", reviewText: "Amazing display" },
+    { id: "8", userId: "4", productId: "3", reviewText: "Very responsive" },
+    { id: "9", userId: "2", productId: "3", reviewText: "Solid build quality" },
+    { id: "10", userId: "3", productId: "4", reviewText: "Noise canceling is top-notch" },
+    { id: "11", userId: "5", productId: "4", reviewText: "Excellent for travel" },
+    { id: "12", userId: "4", productId: "5", reviewText: "Fast and lightweight" },
+    { id: "13", userId: "1", productId: "5", reviewText: "Beautiful screen" },
+    { id: "14", userId: "2", productId: "5", reviewText: "Perfect for work" },
+    { id: "15", userId: "3", productId: "6", reviewText: "Fun for the whole family" },
+    { id: "16", userId: "4", productId: "6", reviewText: "Great game selection" },
+    { id: "17", userId: "5", productId: "6", reviewText: "Easy to set up" },
+    { id: "18", userId: "2", productId: "7", reviewText: "Very handy with Alexa" },
+    { id: "19", userId: "1", productId: "7", reviewText: "Compact and powerful" },
+    { id: "20", userId: "3", productId: "7", reviewText: "Good sound for the size" },
+    { id: "21", userId: "4", productId: "8", reviewText: "Super fast with M1 chip" },
+    { id: "22", userId: "5", productId: "8", reviewText: "Battery lasts all day" },
+    { id: "23", userId: "1", productId: "9", reviewText: "Picture quality is stunning" },
+    { id: "24", userId: "2", productId: "9", reviewText: "Great for movies" },
+    { id: "25", userId: "3", productId: "10", reviewText: "Perfect for travel vlogs" },
+    { id: "26", userId: "4", productId: "10", reviewText: "Easy to use" },
+    { id: "27", userId: "5", productId: "10", reviewText: "Great video quality" }
+  ];
+
+
+  for (const review of reviews) {
+    await reviewContainer.items.upsert(review);
   }
 
   console.log("Seeding complete!");

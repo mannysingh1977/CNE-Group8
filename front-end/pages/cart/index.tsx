@@ -9,6 +9,8 @@ import Head from "next/head";
 import { User } from "@/types/types";
 import { getUser } from "@/services/UserService";
 
+// test
+
 interface DecodedToken {
   userId: string;
 }

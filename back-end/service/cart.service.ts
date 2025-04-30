@@ -60,16 +60,12 @@ export const checkout = async (userId: string, cart: any) => {
     throw new Error('Cart not found');
   }
 
-  console.log('Existing cart items before checkout:', existingCart.items);
-  console.log('Cart items received for checkout:', cart.items);
-
   // Create a new order document in Cosmos DB based on the cart items
   const newOrder = await cartDb.createOrder(userId, cart.items);
 
   // Clear the user's cart
   await cartDb.clearCart(userId);
 
-  console.log('New order created:', newOrder);
   return newOrder;
 };
 
@@ -78,7 +74,6 @@ export const checkout = async (userId: string, cart: any) => {
  */
 const getOrdersByUserId = async (userId: string) => {
   const orders = await cartDb.getOrdersByUserId(userId);
-  console.log('Orders fetched:', orders);
   return orders;
 };
 

@@ -24,7 +24,6 @@ const Home: React.FC = () => {
       return;
     }
     const decodedToken = jwtDecode<DecodedToken>(token);
-    console.log(decodedToken)
     if (decodedToken.exp * 1000 < Date.now()) {
       localStorage.removeItem('token')
       return;

@@ -157,7 +157,6 @@ function useShoppingCart(userId: string) {
       });
     }
   };
-  console.log(cart);
   return { cart, loading, error, updateQuantity, removeItem };
 }
 

@@ -51,7 +51,6 @@ const Settings: React.FC = () => {
     useEffect(() => {
         if (user !== null) {
             setSeller(user.seller);
-            console.log(user.seller);
         }
     }, [user]);
 

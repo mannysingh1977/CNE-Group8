@@ -13,7 +13,6 @@ export const fetchShoppingCart = async (userId: string, token: string) => {
       }
     );
     const data = await res.json();
-    console.log("Response:", data);
 
     if (!res.ok && res.status === 400) {
       localStorage.removeItem("token");
@@ -78,7 +77,6 @@ export const checkoutService = async (
   cart: ShoppingCart,
   token: string
 ) => {
-  console.log(cart);
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}cart/checkout/${userId}`,
     {
@@ -90,7 +88,6 @@ export const checkoutService = async (
       body: JSON.stringify({ cart: cart }),
     }
   );
-  console.log(res);
   if (!res.ok) {
     throw new Error("Failed to checkout");
   }

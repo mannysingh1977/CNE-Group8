@@ -22,13 +22,13 @@ const Profile: React.FC = () => {
         />
       </Head>
       <Navbar />
-      {/* <main className="min-h-screen flex flex-col justify-center gap-5 overscroll-y-contain">
+      <main className="min-h-screen flex flex-col justify-center gap-5 overscroll-y-contain">
         <AddProduct />
-      </main> */}
-      <main>
+      </main>
+      {/* <main>
         <p className="text-center font-bold text-2xl">We are currently working on implementing this feature.</p>
         <p className="text-center font-bold text-2xl">Please come back later</p>
-      </main>
+      </main> */}
     </>
   );
 };

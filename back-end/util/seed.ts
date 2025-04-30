@@ -51,16 +51,16 @@ async function seedDatabase() {
 
   // Create Products
   const products = [
-    { id: "1", name: "JBL Headphones", description: "Noise-cancelling over-ear headphones", media: "/productPictures/jbl.jpeg", stock: 50, price: 199, details: "Wireless, 20 hours battery life" },
-    { id: "2", name: "Apple iPhone 13", description: "Latest model of the iPhone series", media: "/productPictures/iphone.jpg", stock: 30, price: 999, details: "128GB, Black" },
-    { id: "3", name: "Samsung Galaxy S21", description: "Flagship smartphone from Samsung", media: "/productPictures/samsung21.jpg", stock: 40, price: 799, details: "256GB, Silver" },
-    { id: "4", name: "Sony WH-1000XM4", description: "Industry-leading noise canceling", media: "/productPictures/SonyWH.png", stock: 25, price: 349, details: "30 hours battery life, touch sensor controls" },
-    { id: "5", name: "Dell XPS 13", description: "High-performance laptop with InfinityEdge display", media: "/productPictures/Dell_XPS_13.png", stock: 15, price: 1199, details: "13.4-inch FHD+, Intel Core i7, 16GB RAM, 512GB SSD" },
-    { id: "6", name: "Nintendo Switch", description: "Hybrid gaming console", media: "/productPictures/NintendoSwitch.jpg", stock: 50, price: 299, details: "Neon Blue and Red Joy-Con" },
-    { id: "7", name: "Amazon Echo Dot", description: "Smart speaker with Alexa", media: "/productPictures/echo.png", stock: 100, price: 49, details: "4th Gen, Charcoal" },
-    { id: "8", name: "Apple MacBook Pro", description: "Powerful laptop with M1 chip", media: "/productPictures/macbook.png", stock: 20, price: 1299, details: "13-inch, 8GB RAM, 256GB SSD" },
-    { id: "9", name: "Samsung QLED TV", description: "Smart TV with Quantum Dot technology", media: "/productPictures/SamsungQled.jpg", stock: 10, price: 1499, details: "65-inch, 4K UHD, HDR" },
-    { id: "10", name: "GoPro HERO9", description: "Waterproof action camera", media: "/productPictures/GoProHERO9.jpg", stock: 50, price: 399, details: "5K video, 20MP photos" },
+    { id: "1", name: "JBL Headphones", description: "Noise-cancelling over-ear headphones", media: "https://cnegroup8picturestorage.blob.core.windows.net/pictures/jbl.jpeg", stock: 50, price: 199, details: "Wireless, 20 hours battery life" },
+    { id: "2", name: "Apple iPhone 13", description: "Latest model of the iPhone series", media: "https://cnegroup8picturestorage.blob.core.windows.net/pictures/iphone.jpg", stock: 30, price: 999, details: "128GB, Black" },
+    { id: "3", name: "Samsung Galaxy S21", description: "Flagship smartphone from Samsung", media: "https://cnegroup8picturestorage.blob.core.windows.net/pictures/samsung21.jpg", stock: 40, price: 799, details: "256GB, Silver" },
+    { id: "4", name: "Sony WH-1000XM4", description: "Industry-leading noise canceling", media: "https://cnegroup8picturestorage.blob.core.windows.net/pictures/SonyWH.png", stock: 25, price: 349, details: "30 hours battery life, touch sensor controls" },
+    { id: "5", name: "Dell XPS 13", description: "High-performance laptop with InfinityEdge display", media: "https://cnegroup8picturestorage.blob.core.windows.net/pictures/Dell_XPS_13.png", stock: 15, price: 1199, details: "13.4-inch FHD+, Intel Core i7, 16GB RAM, 512GB SSD" },
+    { id: "6", name: "Nintendo Switch", description: "Hybrid gaming console", media: "https://cnegroup8picturestorage.blob.core.windows.net/pictures/NintendoSwitch.jpg", stock: 50, price: 299, details: "Neon Blue and Red Joy-Con" },
+    { id: "7", name: "Amazon Echo Dot", description: "Smart speaker with Alexa", media: "https://cnegroup8picturestorage.blob.core.windows.net/pictures/echo.png", stock: 100, price: 49, details: "4th Gen, Charcoal" },
+    { id: "8", name: "Apple MacBook Pro", description: "Powerful laptop with M1 chip", media: "https://cnegroup8picturestorage.blob.core.windows.net/pictures/macbook.png", stock: 20, price: 1299, details: "13-inch, 8GB RAM, 256GB SSD" },
+    { id: "9", name: "Samsung QLED TV", description: "Smart TV with Quantum Dot technology", media: "https://cnegroup8picturestorage.blob.core.windows.net/pictures/SamsungQled.jpg", stock: 10, price: 1499, details: "65-inch, 4K UHD, HDR" },
+    { id: "10", name: "GoPro HERO9", description: "Waterproof action camera", media: "https://cnegroup8picturestorage.blob.core.windows.net/pictures/GoProHERO9.jpg", stock: 50, price: 399, details: "5K video, 20MP photos" },
   ];
 
   for (const product of products) {

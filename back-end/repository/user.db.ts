@@ -11,6 +11,7 @@ const addressContainer: Container = getContainer("address");
 const mapToUser = async (data: any): Promise<User> => {
   let address;
 
+
   if (data.addressId) {
     address = await addressDb.getAddressById(data.addressId);
   }
@@ -68,7 +69,7 @@ const deleteUser = async (id: string): Promise<void> => {
 
 const getUserById = async ({ id }: { id: string }): Promise<User | null> => {
   try {
-    const { resource: user } = await userContainer.item(id, ).read();
+    const { resource: user } = await userContainer.item(id, id).read();
     if (user && user.addressId) {
       const { resource: address } = await addressDb.getAddressById(user.addressId);
       user.address = address;

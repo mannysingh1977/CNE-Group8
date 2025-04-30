@@ -16,7 +16,6 @@ export const getProductById = async (productId: string) => {
     if (!res.ok) {
         throw new Error("Failed to fetch product");
     }
-    console.log('product', res)
     return res.json();
 };
 

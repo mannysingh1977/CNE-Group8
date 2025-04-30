@@ -51,7 +51,7 @@ const addProduct: React.FC = () => {
       console.log("File type:", file.type);
       console.log("File size:", file.size);
 
-      const newName = "/productPictures/" + file.name.replace(/\s/g, "_");
+      const newName = "https://cnegroup8picturestorage.blob.core.windows.net/" + file.name.replace(/\s/g, "_");
 
       const formData = new FormData();
       formData.append("media", file);

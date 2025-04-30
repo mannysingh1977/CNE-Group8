@@ -163,7 +163,9 @@ const ProductById = ({ onMessage }: { onMessage: (text: string) => void }) => {
     }
 
     const handleDeleteReview = async (id: string, productId: string) => {
-        deleteReviewById(id, productId);
+        await deleteReviewById(id, productId);
+        setStatusMessage("Review deleted succesfully");
+        await getReviewsByProductId(productId);
     }
 
 

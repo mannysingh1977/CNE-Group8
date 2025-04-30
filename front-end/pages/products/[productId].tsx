@@ -1,13 +1,14 @@
 import { Product } from "@/types/cartTypes"
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react"
-import { getProductById as fetchProduct, getReviewsForProduct } from "../../services/productService";
+import { getProductById as fetchProduct } from "../../services/productService";
 import Navbar from "@/components/header/navbar";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { jwtDecode } from "jwt-decode";
-import { Plus, Star } from "lucide-react";
-import { Review } from "@/types/types";
+import { Plus, Star, Trash } from "lucide-react";
+import { Address, Review, Role } from "@/types/types";
+import { deleteReviewById, getReviewsForProduct } from "@/services/reviewService";
 
 interface ProductCardProps {
     name: string;
@@ -17,13 +18,26 @@ interface ProductCardProps {
     onMessage: (text: string) => void;
 }
 
+interface ProfileProps {
+    userId?: string;
+    name: string;
+    phoneNumber: string;
+    emailAddress: string;
+    password: string;
+    address: Address;
+    seller: boolean;
+    newsLetter: boolean;
+    role: Role;
+}
+
 const ProductById = ({ onMessage }: { onMessage: (text: string) => void }) => {
     const [product, setProduct] = useState<Product | null>(null);
     const [reviews, setReviews] = useState<Array<Review> | []>([])
     const [statusMessage, setStatusMessage] = useState<string>('');
     const [showReviewForm, setShowReviewForm] = useState<boolean>(false);
     const [reviewText, setReviewText] = useState<string>('');
-    const [stars, setStars] = useState<number>(0)
+    const [stars, setStars] = useState<number>(0);
+    const [role, setRole] = useState<Role>();
 
     useEffect(() => {
         if (statusMessage) {
@@ -60,6 +74,16 @@ const ProductById = ({ onMessage }: { onMessage: (text: string) => void }) => {
             getReviewsByProductId(String(productId));
         }
     }, [productId]);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        if (token) {
+            const decoded = jwtDecode<ProfileProps>(token);
+            if (decoded) {
+                setRole(decoded.role);
+            }
+        }
+    })
 
     const addToCart = async (productId: string, event: React.MouseEvent) => {
         event.stopPropagation();
@@ -138,6 +162,10 @@ const ProductById = ({ onMessage }: { onMessage: (text: string) => void }) => {
         }
     }
 
+    const handleDeleteReview = async (id: string, productId: string) => {
+        deleteReviewById(id, productId);
+    }
+
 
     return (
         <>
@@ -151,12 +179,12 @@ const ProductById = ({ onMessage }: { onMessage: (text: string) => void }) => {
                     <div className="flex flex-col md:flex-row justify-center gap-5 mt-5 text-xl">
                         <p className="pr-5 font-bold text-gray-700">{t('product.price')}: <span className="text-green-500">${product.price}</span></p>
                         <p className="font-bold text-gray-700 pr-5">{t('product.stock')}: <span className="text-red-500">{product.stock}</span></p>
-                    <button
-                        onClick={(event) => addToCart(String(productId), event)}
-                        className="bg-blue-700 hover:bg-blue-800 text-white font-medium text-sm sm:text-base py-2 px-3 sm:px-4 rounded-md shadow-sm transition duration-300 ease-in-out transform hover:scale-102 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center space-x-1 sm:space-x-2 w-auto"
-                    >
-                        <Plus size={16} className="sm:w-5 sm:h-5" />
-                    </button>
+                        <button
+                            onClick={(event) => addToCart(String(productId), event)}
+                            className="bg-blue-700 hover:bg-blue-800 text-white font-medium text-sm sm:text-base py-2 px-3 sm:px-4 rounded-md shadow-sm transition duration-300 ease-in-out transform hover:scale-102 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center space-x-1 sm:space-x-2 w-auto"
+                        >
+                            <Plus size={16} className="sm:w-5 sm:h-5" />
+                        </button>
                     </div>
                     {statusMessage && <p className="text-center text-xl text-green-500">{statusMessage}</p>}
                     {product.stock < 20 && (
@@ -237,13 +265,23 @@ const ProductById = ({ onMessage }: { onMessage: (text: string) => void }) => {
                     <div className="space-y-4">
                         {reviews.length > 0 ? (
                             reviews.map((review, index) => (
-                                <div key={index} className="p-4 border rounded-lg shadow-sm">
-                                    <p className="text-gray-600">{review.reviewText}</p>
-                                    <div className="flex items-center space-x-1">
-                                        {Array.from({ length: review.stars ?? 0 }, (_, i) => (
-                                            <Star key={i} size={16} className="text-yellow-500 fill-current" />
-                                        ))}
+                                <div key={index} className="p-4 border rounded-lg shadow-sm flex justify-between items-center">
+                                    <div>
+                                        <p className="text-gray-600">{review.reviewText}</p>
+                                        <div className="flex items-center space-x-1">
+                                            {Array.from({ length: review.stars ?? 0 }, (_, i) => (
+                                                <Star key={i} size={16} className="text-yellow-500 fill-current" />
+                                            ))}
+                                        </div>
                                     </div>
+                                    {(role === "Admin" || role === "Owner") && (
+                                        <button
+                                            onClick={() => handleDeleteReview(String(review.id), String(productId))}
+                                            className="text-red-500 hover:text-red-700"
+                                        >
+                                            <Trash size={20} />
+                                        </button>
+                                    )}
                                 </div>
                             ))
                         ) : (

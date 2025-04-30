@@ -68,7 +68,7 @@ const deleteUser = async (id: string): Promise<void> => {
 
 const getUserById = async ({ id }: { id: string }): Promise<User | null> => {
   try {
-    const { resource: user } = await userContainer.item(id, id).read();
+    const { resource: user } = await userContainer.item(id, ).read();
     if (user && user.addressId) {
       const { resource: address } = await addressDb.getAddressById(user.addressId);
       user.address = address;

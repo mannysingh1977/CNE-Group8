@@ -30,4 +30,20 @@ reviewRouter.post("/addReview", async (req: Request, res: Response, next: NextFu
     }
 })
 
+reviewRouter.delete("/delete/:id/:productId", async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({ message: "No token provided" });
+        }
+        const token = authHeader.split(" ")[1];
+        const id = req.params.id
+        const productId = req.params.productId
+        const deletedReview = await reviewService.deleteReviewById(id, String(token), productId)
+        res.status(200).json(deletedReview);
+    } catch(error) {
+        next(error);
+    }
+})
+
 export { reviewRouter };

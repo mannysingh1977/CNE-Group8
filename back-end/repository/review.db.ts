@@ -36,6 +36,17 @@ const getReviewByProductId = async ({ productId }: { productId: string }): Promi
     }
 };
 
+const getReviewById = async (id: string, productId: string): Promise<Review> => {
+    try {
+        const { resource: review } = await reviewContainer.item(id, productId).read();
+        const mappedReview = await mapToReview(review);
+        return mappedReview;
+    } catch(error) {
+        console.log(error);
+        throw new Error("Database error. See server logs for details")
+    }
+}
+
 const createReview = (productId: string, userId: string, reviewText: string, stars: number): Promise<Review> => {
     const review = new Review({userId, productId, reviewText, stars})
     return reviewContainer.items.create({ ...review }).then(response => {
@@ -46,7 +57,22 @@ const createReview = (productId: string, userId: string, reviewText: string, sta
     });
 }
 
+const deleteReviewById = async (id: string, productId: string): Promise<void> => {
+    try {
+        const {resource: review} = await reviewContainer.item(id, productId).read();
+
+        if (!review) return;
+
+        await reviewContainer.item(id, productId).delete();
+    } catch(error) {
+        console.log(error);
+        throw new Error("Database error. See server logs for details");
+    }
+}
+
 export default {
     getReviewByProductId,
-    createReview
+    createReview,
+    deleteReviewById,
+    getReviewById,
 }

@@ -29,7 +29,6 @@ const CheckoutComponent: React.FC<CheckoutProps> = ({ userId, cart }) => {
       if (token) {
         const checkout = checkoutService(userId, cart, token);
         if ((await checkout).ok) {
-          console.log("Checkout successful");
           openModal();
           setTimeout(() => {
             window.location.href = "/";

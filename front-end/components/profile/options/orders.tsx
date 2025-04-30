@@ -105,7 +105,6 @@ const Orders: React.FC = () => {
             {!collapsed[order.id] && (
               <ul>
                 {order.items.map((item) => {
-                  console.log(item);
                   return (
                     <li key={item.id} className="flex flex-row items-center">
                       <img

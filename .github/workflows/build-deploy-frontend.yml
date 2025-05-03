@@ -1,4 +1,4 @@
-name: Build and deploy front-end and functions to Azure Web App - CNE-Group8-front-end + functions
+name: Build and deploy front-end to Azure Web App - CNE-Group8-front-end
 
 on:
   push:

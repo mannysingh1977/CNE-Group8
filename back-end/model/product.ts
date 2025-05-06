@@ -46,34 +46,33 @@ export class Product {
     id?: string | undefined;
   }) {
     if (!product.name) {
-      throw new Error('Name is required');
+      throw new Error("Name is required");
     }
     if (!product.description) {
-      throw new Error('Description is required');
+      throw new Error("Description is required");
     }
     if (!product.media) {
-      throw new Error('Media is required');
+      throw new Error("Media is required");
     }
-    if (product.stock === undefined || product.stock < 0) {
-      throw new Error('Stock is required and must be a positive number');
+    if (product.stock === undefined || product.stock <= 0) {
+      throw new Error("Stock is required and must be a positive number");
     }
-    if (product.price === undefined || product.price < 0) {
-      throw new Error('Price is required and must be a positive number');
+    if (product.price === undefined || product.price <= 0) {
+      throw new Error("Price is required and must be a positive number");
     }
     if (!product.details) {
-      throw new Error('Details are required');
+      throw new Error("Details are required");
     }
   }
 
   static fromObject(data: {
-    id?: string,
-    name: string,
-    description: string,
-    media: string,
-    stock: number,
-    price: number,
-    details: string,
-
+    id?: string;
+    name: string;
+    description: string;
+    media: string;
+    stock: number;
+    price: number;
+    details: string;
   }): Product {
     return new Product({
       id: data.id,

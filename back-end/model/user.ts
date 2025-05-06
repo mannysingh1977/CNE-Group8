@@ -1,6 +1,6 @@
-import { ro } from 'date-fns/locale';
-import { Role } from '../types';
-import { Address } from './address';
+import { ro } from "date-fns/locale";
+import { Role } from "../types";
+import { Address } from "./address";
 
 export class User {
   private id?: string;
@@ -48,32 +48,35 @@ export class User {
     role: Role;
   }) {
     if (!user.name) {
-      throw new Error('User name is required');
+      throw new Error("User name is required");
     }
     if (!user.phoneNumber) {
-      throw new Error('User phone number is required');
+      throw new Error("User phone number is required");
     }
     if (!user.emailAddress) {
-      throw new Error('User email address is required');
+      throw new Error("User email address is required");
     }
     if (!user.password) {
-      throw new Error('User password is required');
+      throw new Error("User password is required");
     }
     if (!user.address) {
-      throw new Error('User address is required');
+      throw new Error("User address is required");
     }
     if (user.seller === undefined) {
-      throw new Error('User seller flag is required');
+      throw new Error("User seller flag is required");
     }
     if (user.newsLetter === undefined) {
-      throw new Error('User newsLetter flag is required');
+      throw new Error("User newsLetter flag is required");
     }
     if (!user.role) {
-      throw new Error('User role is required');
+      throw new Error("User role is required");
     }
   }
 
-  getId(): string | undefined {
+  public getId(): string {
+    if (!this.id) {
+      throw new Error("User ID is not defined");
+    }
     return this.id;
   }
   getName(): string {
@@ -103,11 +106,15 @@ export class User {
 
   setRole(role: Role) {
     this.role = role;
-  };
+  }
 
   setSeller(boolean: boolean) {
     this.seller = boolean;
-  };
+  }
+
+  public equals(other: User): boolean {
+    return this.id === other.getId();
+  }
 
   toObject(): object {
     return {

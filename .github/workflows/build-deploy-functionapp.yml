@@ -20,13 +20,22 @@ jobs:
       contents: read
 
     steps:
-      - name: Checkout repository
+      - name: "Checkout GitHub Action"
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+
+      - name: Cleanup old zip files
+        run: |
+          curl --verbose --location "cne-group8-functionapp.azurewebsites.net/api/command" \
+          --header "Content-Type: application/json" \
+          --data "{\"command\": \"sh -c \\\"rm -f *.zip\\\"\", \"dir\": \"/home/data/SitePackages\"}" \
+          -u "${{ secrets.FUNCTION_APP_KUDU_USERNAME }}:${{ secrets.FUNCTION_APP_KUDU_PASSWORD }}"
+
+
 
       - name: Install, Build, and Test
         working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
@@ -35,10 +44,10 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
-      - name: Zip function app for deployment
+      - name: Zip artifact for deployment
         run: |
           cd ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          zip -r ../release.zip ./*
+          zip -r ../release.zip .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -56,16 +65,12 @@ jobs:
         with:
           name: node-app
 
-      - name: Unzip artifact
+      - name: Unzip artifact for deployment
         run: unzip release.zip -d package
 
-      - name: Show contents of deployment package (debug)
-        run: ls -R package
-
-      - name: Deploy to Azure Function App
+      - name: "Run Azure Functions Action"
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
           slot-name: "Production"
-          package: package
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CCDBD468876E455E834D3EAE8B886EBA }}

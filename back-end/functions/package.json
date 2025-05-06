@@ -38,6 +38,7 @@
     "@types/jsonwebtoken": "^9.0.9",
     "@types/multer": "^1.4.12",
     "@types/node": "^18.19.87",
+    "@types/parse-multipart": "^1.0.2",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
     "azure-functions-core-tools": "^4.0.7030",

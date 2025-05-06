@@ -31,7 +31,7 @@ app.http("uploadFile", {
 
       const bodyBuffer = await req.arrayBuffer();
       const body = Buffer.from(bodyBuffer);
-      const parts = multipart.parse(body, boundary);
+      const parts = multipart.Parse(body, boundary);
 
       if (!parts || parts.length === 0) {
         return { status: 400, body: "No file uploaded" };

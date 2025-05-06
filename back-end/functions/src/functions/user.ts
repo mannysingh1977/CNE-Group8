@@ -7,7 +7,7 @@ import {
   InvocationContext,
 } from "@azure/functions";
 import userService from "../../../service/user.service";
-import { Role } from "../../../types";
+import { Role, UserInput } from "../../../types";
 
 interface LoginBody {
   email: string;
@@ -55,8 +55,10 @@ app.http("login", {
     ctx: InvocationContext
   ): Promise<HttpResponseInit> => {
     try {
+
       const body = await req.json();
-      const result = await userService.authenticate(body);
+      const input = body as UserInput; // type assertion
+      const result = await userService.authenticate(input);
       return { status: 200, body: JSON.stringify(result) };
     } catch (e: any) {
       ctx.log(e);
@@ -75,7 +77,8 @@ app.http("register", {
   ): Promise<HttpResponseInit> => {
     try {
       const body = await req.json();
-      const user = await userService.addUser(body);
+      const input = body as UserInput;
+      const user = await userService.addUser(input);
       return { status: 201, body: JSON.stringify(user) };
     } catch (e: any) {
       ctx.log(e);

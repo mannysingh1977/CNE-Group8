@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@azure/functions": "^4.7.0",
     "express": "^5.1.0"
   },
   "devDependencies": {

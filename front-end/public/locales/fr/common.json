@@ -52,7 +52,7 @@
     "success": "Produit ajouté avec succès",
     "redirect": "Vous serez redirigé vers la page d'accueil dans 3 secondes",
     "hurry": "Dépêchez-vous, il ne reste que quelques articles en stock !",
-    "review": "Avis"
+    "reviews": "Avis"
   },
   "cart": {
     "title": "Panier",

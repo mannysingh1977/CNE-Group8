@@ -32,7 +32,6 @@
  *       scheme: bearer
  *       bearerFormat: JWT
  */
-//
 import express, { NextFunction, Request, Response } from 'express';
 import cartService from '../service/cart.service';
 

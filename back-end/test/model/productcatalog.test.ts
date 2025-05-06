@@ -19,5 +19,5 @@ test("give: valid product, when: adding product to cart, then: product is added 
   const addedProduct = productCatalog.addProduct(product);
 
   expect(product).toEqual(addedProduct);
-  expect(productCatalog.getProductIds().length).toBe(0);
+  expect(productCatalog.getProductIds().length).toBe(1);
 });

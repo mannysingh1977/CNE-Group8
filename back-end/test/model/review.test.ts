@@ -11,7 +11,9 @@ const address = new Address({
   postalCode: "3000",
   country: "Belgium",
 });
+
 const user = new User({
+  id: "user-1",
   name: "John Doe",
   phoneNumber: "0612345678",
   emailAddress: "email@gmail.com",
@@ -21,7 +23,9 @@ const user = new User({
   newsLetter: true,
   role: "User",
 });
-let product = new Product({
+
+const product = new Product({
+  id: "product-1",
   name: "JBL hoofdtelefoon",
   description: "Een jbl hoofdtelefoon met noice canceling",
   media: "/home/media/jbl.png",
@@ -32,8 +36,8 @@ let product = new Product({
 
 test("given: valid review info, when: creating review, then: review is created", () => {
   const review = new Review({
-    userId: user.getId() || "",
-    productId: product.getId() || "",
+    userId: user.getId(),
+    productId: product.getId() ?? "",
     reviewText: "This is a great product",
     stars: 5,
   });

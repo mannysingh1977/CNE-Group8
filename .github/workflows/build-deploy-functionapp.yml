@@ -101,6 +101,15 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Cleanup old zip files
+        run: |
+          curl --verbose --location "https://team10-function-app-dpfncdcnaha0gjgv.scm.westeurope-01.azurewebsites.net/api/command" \
+            --header "Content-Type: application/json" \
+            --data "{\"command\": \"sh -c \\\"rm -f *.zip\\\"\", \"dir\": \"/home/data/SitePackages\"}" \
+            -u "${{ secrets.FUNCTION_APP_KUDU_USERNAME }}:${{ secrets.FUNCTION_APP_KUDU_PASSWORD }}"
+
+
+
       - name: Install, Build, and Test
         working-directory: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
         run: |
